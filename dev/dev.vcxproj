@@ -147,12 +147,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\TRG\GiltTNR.cpp" />
+    <ClCompile Include="src\TRG\loopTNR.cpp" />
+    <ClCompile Include="src\TRG\TEFR.cpp" />
+    <ClCompile Include="src\TRG\tnr.cpp" />
+    <ClCompile Include="src\TRG\trg.cpp" />
+    <ClCompile Include="src\util\cft_data.cpp" />
+    <ClCompile Include="src\util\database.cpp" />
+    <ClCompile Include="src\util\extract_mat.cpp" />
+    <ClCompile Include="src\util\glue.cpp" />
+    <ClCompile Include="src\util\it_help.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\itensor3\itensor3.vcxproj">
       <Project>{24349a19-9562-4cdf-a620-278eb9b7ada1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\inc.h" />
+    <ClInclude Include="src\sample\fibo_exact.h" />
+    <ClInclude Include="src\sample\ising_trg.h" />
+    <ClInclude Include="src\sample\tnr_test.h" />
+    <ClInclude Include="src\TRG\GiltTNR.h" />
+    <ClInclude Include="src\TRG\loopTNR.h" />
+    <ClInclude Include="src\TRG\TEFR.h" />
+    <ClInclude Include="src\TRG\tnr.h" />
+    <ClInclude Include="src\TRG\trg.h" />
+    <ClInclude Include="src\util\cft_data.h" />
+    <ClInclude Include="src\util\database.h" />
+    <ClInclude Include="src\util\extract_mat.h" />
+    <ClInclude Include="src\util\glue.h" />
+    <ClInclude Include="src\util\it_help.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
