@@ -45,9 +45,6 @@
     <ClInclude Include="itensor\itdata\itdata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="itensor\itdata\itlazy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="itensor\itdata\qcombiner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -537,36 +534,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="itensor\tagset.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\itdata\itlazy.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\stl\string.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\stl\vector.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\array_interface.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\base.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\file.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\format.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\group.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\h5object.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="itensor\util\h5\scalar.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

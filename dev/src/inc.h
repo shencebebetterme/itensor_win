@@ -1,9 +1,10 @@
 #pragma once
 
-#include "itensor/all_basic.h"
-#include "itensor/util/print_macro.h"
 
 #include <armadillo>
+
+#include "itensor/all_basic.h"
+#include "itensor/util/print_macro.h"
 
 #include <iostream>
 

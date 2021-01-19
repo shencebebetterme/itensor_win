@@ -195,7 +195,6 @@
     <ClInclude Include="itensor\itdata\diag.h" />
     <ClInclude Include="itensor\itdata\dotask.h" />
     <ClInclude Include="itensor\itdata\itdata.h" />
-    <ClInclude Include="itensor\itdata\itlazy.h" />
     <ClInclude Include="itensor\itdata\qcombiner.h" />
     <ClInclude Include="itensor\itdata\qdense.h" />
     <ClInclude Include="itensor\itdata\qdiag.h" />
@@ -323,7 +322,6 @@
     <ClCompile Include="itensor\itdata\combiner.cc" />
     <ClCompile Include="itensor\itdata\dense.cc" />
     <ClCompile Include="itensor\itdata\diag.cc" />
-    <ClCompile Include="itensor\itdata\itlazy.cc" />
     <ClCompile Include="itensor\itdata\qcombiner.cc" />
     <ClCompile Include="itensor\itdata\qdense.cc" />
     <ClCompile Include="itensor\itdata\qdiag.cc" />
@@ -346,15 +344,6 @@
     <ClCompile Include="itensor\tensor\vec.cc" />
     <ClCompile Include="itensor\util\args.cc" />
     <ClCompile Include="itensor\util\cputime.cc" />
-    <ClCompile Include="itensor\util\h5\array_interface.cc" />
-    <ClCompile Include="itensor\util\h5\base.cc" />
-    <ClCompile Include="itensor\util\h5\file.cc" />
-    <ClCompile Include="itensor\util\h5\format.cc" />
-    <ClCompile Include="itensor\util\h5\group.cc" />
-    <ClCompile Include="itensor\util\h5\h5object.cc" />
-    <ClCompile Include="itensor\util\h5\scalar.cc" />
-    <ClCompile Include="itensor\util\h5\stl\string.cc" />
-    <ClCompile Include="itensor\util\h5\stl\vector.cc" />
     <ClCompile Include="itensor\util\input.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
