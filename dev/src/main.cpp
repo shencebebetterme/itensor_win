@@ -34,9 +34,13 @@ int main() {
 	auto p1 = v.begin();
 	auto p2 = v.end();*/
 
-	std::vector<int> vec(5, 0);
-	int a = vec[5];
-
+	ITensor A = database::ising2d(beta_c);
+	PrintData(A);
+	ITensor As = glue(A, 2);
+	PrintData(As);
+	arma::mat Asmat = extract_mat(As);
+	Asmat.print("Asmat=");
 	int k = 1;
+	std::cin.get();
 }
 
