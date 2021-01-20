@@ -61,7 +61,7 @@ void show_shape(const IndexSet& is) {
 
 
 
-std::string myprint(TagSet ts)
+std::string myprint_ts(const TagSet& ts)
 {
 	std::string s;
 	s = "''";
@@ -75,23 +75,35 @@ std::string myprint(TagSet ts)
 	return s;
 }
 
-std::string myprint(Index idx) {
-	string s = myprint(idx.tags());
+std::string myprint_idx(const Index& idx) {
+	string s = myprint_ts(idx.tags());
 	s += " dim=" + str(idx.dim());
 	s += " id=" + str(id(idx) % 1000);
 	s += " || ";
 	return s;
 }
 
-std::string myprint(IndexSet is) {
+std::string myprint_is(const IndexSet& is) {
 	string s;
 	for (auto idx : is) {
-		s += myprint(idx);
+		s += myprint_idx(idx);
 	}
 	return s;
 }
 
-std::string myprint(ITensor A) {
-	return myprint(A.inds());
+std::string myprint(const ITensor& A) {
+	return myprint_is(A.inds());
 }
 
+std::vector<double> mypeek(const ITensor& A) {
+	int count = 0;
+	constexpr int count_max = 10;
+	std::vector<double> vec = {};
+
+	for (auto it : iterInds(A)) {
+		vec.push_back(A.elt(it));
+		count += 1;
+		if (count == 10) break;
+	}
+	return vec;
+}

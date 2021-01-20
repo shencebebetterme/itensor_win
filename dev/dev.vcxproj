@@ -118,17 +118,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HAVE_LAPACK_CONFIG_H;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;LAPACK_COMPLEX_STRUCTURE;ARMA_DONT_USE_WRAPPER</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEBUG;_CONSOLE;%(PreprocessorDefinitions);HAVE_LAPACK_CONFIG_H;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;LAPACK_COMPLEX_STRUCTURE;ARMA_DONT_USE_WRAPPER</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\itensor3;$(SolutionDir)itensor3\itensor\dependencies;C:\green_apps\HDF5-1.12.0-win64-cmake\include;C:\msys64\mingw64\include\OpenBLAS;$(ProjectDir)arma</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\itensor3;$(SolutionDir)itensor3\itensor\dependencies;C:\msys64\mingw64\include\OpenBLAS;C:\msys64\mingw64\include\arpack;$(ProjectDir)arma;C:\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libopenblas.lib;libarpack.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\dev\usr\lib_win</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HAVE_LAPACK_CONFIG_H;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;LAPACK_COMPLEX_STRUCTURE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\itensor3;$(SolutionDir)itensor3\itensor\dependencies;C:\green_apps\HDF5-1.12.0-win64-cmake\include;C:\msys64\mingw64\include\OpenBLAS;$(ProjectDir)arma</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\itensor3;$(SolutionDir)itensor3\itensor\dependencies;C:\msys64\mingw64\include\OpenBLAS;C:\msys64\mingw64\include\arpack;$(ProjectDir)arma;C:\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -148,8 +148,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libopenblas.lib;libarpack.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\dev\usr\lib_win</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,11 +164,6 @@
     <ClCompile Include="src\util\extract_mat.cpp" />
     <ClCompile Include="src\util\glue.cpp" />
     <ClCompile Include="src\util\it_help.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\itensor3\itensor3.vcxproj">
-      <Project>{24349a19-9562-4cdf-a620-278eb9b7ada1}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arma\armadillo_bits\access.hpp" />
@@ -771,6 +766,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="arma\armadillo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\itensor3\itensor3.vcxproj">
+      <Project>{24349a19-9562-4cdf-a620-278eb9b7ada1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

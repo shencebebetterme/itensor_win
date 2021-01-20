@@ -13,7 +13,8 @@ void show_shape(const ITensor&);
 void show_shape(const IndexSet&);
 
 
-std::string myprint(TagSet ts);
-std::string myprint(Index idx);
-std::string myprint(IndexSet is);
-std::string myprint(ITensor A);
+std::string myprint_ts(const TagSet& ts);
+std::string myprint_idx(const Index& idx);
+std::string myprint_is(const IndexSet& is);
+std::string myprint(const ITensor& A);
+std::vector<double> mypeek(const ITensor& A);

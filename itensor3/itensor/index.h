@@ -308,6 +308,7 @@ class IndexVal
     long
     dim() const { return index.dim(); }
 
+    // implicit type conversion, usage: if(ival)
     explicit operator bool() const { return bool(index); }
 
     // Add tags

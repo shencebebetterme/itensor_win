@@ -134,10 +134,10 @@
       <AdditionalDependencies>libopenblas.lib;libarpack.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>libopenblas.lib;libarpack.lib;hdf5.lib;hdf5_hl.lib;</AdditionalDependencies>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;hdf5.lib;hdf5_hl.lib;</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>C:\dev\usr\lib_win;C:\green_apps\HDF5-1.12.0-win64-cmake\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;C:\green_apps\HDF5-1.12.0-win64-cmake\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,10 +163,10 @@
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Lib>
-      <AdditionalDependencies>libopenblas.lib;libarpack.lib;hdf5.lib;hdf5_hl.lib;</AdditionalDependencies>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;hdf5.lib;hdf5_hl.lib;</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>C:\dev\usr\lib_win;C:\green_apps\HDF5-1.12.0-win64-cmake\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;C:\green_apps\HDF5-1.12.0-win64-cmake\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
