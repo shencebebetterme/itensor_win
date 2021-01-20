@@ -126,6 +126,7 @@
       <AdditionalIncludeDirectories>C:\msys64\mingw64\include\OpenBLAS;C:\msys64\mingw64\include\arpack;$(ProjectDir);$(ProjectDir)itensor\dependencies;C:\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

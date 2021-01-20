@@ -123,6 +123,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\itensor3;$(SolutionDir)itensor3\itensor\dependencies;C:\msys64\mingw64\include\OpenBLAS;C:\msys64\mingw64\include\arpack;$(ProjectDir)arma;C:\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -93,6 +93,7 @@ std::string myprint_is(const IndexSet& is) {
 
 std::string myprint(const ITensor& A) {
 	return myprint_is(A.inds());
+	//return A.myprint();
 }
 
 std::vector<double> mypeek(const ITensor& A) {
