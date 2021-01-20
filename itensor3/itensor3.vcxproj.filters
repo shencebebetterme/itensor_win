@@ -536,5 +536,23 @@
     <ClCompile Include="itensor\tagset.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="itensor\util\h5\array_interface.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\file.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\group.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\h5object.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\stl\string.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\stl\vector.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

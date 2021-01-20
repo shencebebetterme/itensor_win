@@ -12,6 +12,8 @@
 #define H5_REQUIRES(...) __attribute__((enable_if(__VA_ARGS__, H5_AS_STRING2(__VA_ARGS__))))
 #elif __GNUC__
 #define H5_REQUIRES(...) requires(__VA_ARGS__)
+#elif __MY_WIN__
+#define H5_REQUIRES(...)
 #endif
 
 // DEBUG PRINTING
