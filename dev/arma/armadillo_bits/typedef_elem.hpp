@@ -137,8 +137,10 @@ typedef void* void_ptr;
   typedef MKL_Complex16 blas_cxd;
 #else
   // standard BLAS and LAPACK prototypes use "void*" pointers for complex arrays
-  typedef void blas_cxf;
-  typedef void blas_cxd;
+  //typedef void blas_cxf;
+  //typedef void blas_cxd;
+  typedef std::complex<float> blas_cxf;
+  typedef std::complex<double> blas_cxd;
 #endif
 
 

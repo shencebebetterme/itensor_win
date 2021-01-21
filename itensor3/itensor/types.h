@@ -36,11 +36,11 @@ const Cplx Complex_i = Cplx(0,1);
 const Cplx Cplx_1 = Cplx(1,0);
 const Cplx Cplx_i = Cplx(0,1);
 
-inline Real& 
-realRef(Cplx & z) { return reinterpret_cast<Real*>(&z)[0]; }
+inline Real&
+realRef(Cplx& z);// { return reinterpret_cast<Real*>(&z)[0]; }
 
-inline Real& 
-imagRef(Cplx & z) { return reinterpret_cast<Real*>(&z)[1]; }
+inline Real&
+imagRef(Cplx& z);// { return reinterpret_cast<Real*>(&z)[1]; }
 
 void inline
 applyConj(Real & r) { }

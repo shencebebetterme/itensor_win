@@ -16,14 +16,14 @@
 
 
 #if !defined(ARMA_USE_LAPACK)
-//#define ARMA_USE_LAPACK
+#define ARMA_USE_LAPACK
 //// Comment out the above line if you don't have LAPACK or a high-speed replacement for LAPACK,
 //// such as Intel MKL, AMD ACML, or the Accelerate framework.
 //// LAPACK is required for matrix decompositions (eg. SVD) and matrix inverse.
 #endif
 
 #if !defined(ARMA_USE_BLAS)
-//#define ARMA_USE_BLAS
+#define ARMA_USE_BLAS
 //// Comment out the above line if you don't have BLAS or a high-speed replacement for BLAS,
 //// such as OpenBLAS, GotoBLAS, Intel MKL, AMD ACML, or the Accelerate framework.
 //// BLAS is used for matrix multiplication.
@@ -31,13 +31,13 @@
 #endif
 
 #if !defined(ARMA_USE_NEWARP)
-#define ARMA_USE_NEWARP
+//#define ARMA_USE_NEWARP
 //// Uncomment the above line to enable the built-in partial emulation of ARPACK.
 //// This is used for eigen decompositions of real (non-complex) sparse matrices, eg. eigs_sym(), svds() 
 #endif
 
 #if !defined(ARMA_USE_ARPACK)
-// #define ARMA_USE_ARPACK
+//#define ARMA_USE_ARPACK
 //// Uncomment the above line if you have ARPACK or a high-speed replacement for ARPACK.
 //// ARPACK is required for eigen decompositions of complex sparse matrices
 #endif
@@ -56,7 +56,7 @@
 //// Make sure the directory has a trailing /
 #endif
 
- #define ARMA_USE_WRAPPER
+// #define ARMA_USE_WRAPPER
 //// Comment out the above line if you're getting linking errors when compiling your programs,
 //// or if you prefer to directly link with LAPACK, BLAS + etc instead of the Armadillo runtime library.
 //// You will then need to link your programs directly with -llapack -lblas instead of -larmadillo
@@ -74,7 +74,7 @@
 // #define ARMA_BLAS_LONG_LONG
 //// Uncomment the above line if your BLAS and LAPACK libraries use "long long" instead of "int"
 
-#define ARMA_USE_FORTRAN_HIDDEN_ARGS
+//#define ARMA_USE_FORTRAN_HIDDEN_ARGS
 //// Comment out the above line to call BLAS and LAPACK functions without using so-called "hidden" arguments.
 //// Fortran functions (compiled without a BIND(C) declaration) that have char arguments
 //// (like many BLAS and LAPACK functions) also have associated "hidden" arguments.

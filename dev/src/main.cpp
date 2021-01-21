@@ -30,25 +30,17 @@ void testCFT(ITensor A) {
 //todo: windows link to hdf5 and openmp
 int main() {
 	const double beta_c = 0.5 * log(1 + sqrt(2));
+	const int n = 1000;
+	mat A = randu<mat>(n, n);
+	mat B = randu<mat>(n, n);
 
-	/*autovector<double> v(0, 1);
-	auto l = v.size();
-	auto p1 = v.begin();
-	auto p2 = v.end();*/
 
-	/*ITensor A = database::ising2d(beta_c);
-	PrintData(A);
-	ITensor As = glue(A, 2);
-	PrintData(As);
-	arma::mat Asmat = extract_mat(As);
-	Asmat.print("Asmat=");
-	int k = 1;
-	std::cin.get();*/
-	TagSet ts("hello,world");
-	Index i(9,"i");
-	Index j(9,"j");
-	auto A = randomITensor(i, j);
-	int k = 0;
+	auto start = high_resolution_clock::now();
+	B = A * B;
+	auto stop = high_resolution_clock::now();
+
+	auto duration = duration_cast<microseconds>(stop - start);
+	std::cout << duration.count() / 1000000.0 << std::endl;
 
 }
 
