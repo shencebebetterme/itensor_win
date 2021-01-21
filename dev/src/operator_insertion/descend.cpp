@@ -4,6 +4,30 @@
 void tensor_log() {
 	const double beta_c = 0.5 * log(1 + sqrt(2));
 	ITensor A0 = database::ising2d(beta_c);
+	A0.randomize();
+	PrintData(A0);
 
 	ITensor A = glue_bare_ring(A0, 3);
+	IndexSet u_is = findInds(A, "u");
+	IndexSet d_is = findInds(A, "d");
+	auto [uT, U] = combiner(u_is);
+	auto [dT, D] = combiner(d_is);
+
+	A = uT * A * dT;//now A has order 2
+	int di = A.index(1).dim();
+	int dj = A.index(2).dim();
+
+	auto extractReal = [](Dense<Real> const& d)
+	{
+		return d.store;
+	};
+
+	auto data_vec = applyFunc(extractReal, A.store());
+
+	arma::mat denseT(&data_vec[0], di, dj, true);
+	denseT = arma::logmat_sympd(denseT);
+
+	//todo: obtain an ITensor from arma mat
+
+	//todo: match indices, then contract with uT and dT to restore index structure
 }
