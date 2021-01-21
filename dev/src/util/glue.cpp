@@ -36,25 +36,32 @@ ITensor glue_bare_ring(const ITensor& A, int n) {
 ITensor glue(const ITensor& A, int n, bool twist) {
 	if (n == 1) return A;
 
-	int nl = 1;
-	int nr = 0;
-	if (n % 2 == 0) nl = n / 2;
-	else nl = (n - 1) / 2;
-	nr = n - nl;
+	ITensor res;
+	if (n < 6) {
+		res = glue_bare_ring(A, n);
+	}
+	else
+	{
+		int nl = 1;
+		int nr = 0;
+		if (n % 2 == 0) nl = n / 2;
+		else nl = (n - 1) / 2;
+		nr = n - nl;
 
-	ITensor AL = glue_bare(A, nl);
-	ITensor AR = glue_bare(A, nr);
+		ITensor AL = glue_bare(A, nl);
+		ITensor AR = glue_bare(A, nr);
 
-	// contract AL and AR
-	AR.prime(nl);
+		// contract AL and AR
+		AR.prime(nl);
 
-	Index ALl = findIndex(AL, "l");
-	Index ALr = findIndex(AL, "r");
-	Index ARl = findIndex(AR, "l");
-	Index ARr = findIndex(AR, "r");
+		Index ALl = findIndex(AL, "l");
+		Index ALr = findIndex(AL, "r");
+		Index ARl = findIndex(AR, "l");
+		Index ARr = findIndex(AR, "r");
 
-	AL.replaceInds({ ALl,ALr }, { ARr,ARl });
-	ITensor res = AL * AR;
+		AL.replaceInds({ ALl,ALr }, { ARr,ARl });
+		res = AL * AR;
+	}
 
 	IndexSet u_is = findInds(res, "u");
 	IndexSet d_is = findInds(res, "d");
