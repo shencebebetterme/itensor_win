@@ -125,7 +125,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <AdditionalOptions>/D HAVE_LAPACK_CONFIG_H    /D LAPACK_COMPLEX_CPP    /D H5Oget_info_by_name_vers=1    /D H5O_info_t_vers=1     /D H5_BUILT_AS_DYNAMIC_LIB=1 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D HAVE_LAPACK_CONFIG_H    /D LAPACK_COMPLEX_CPP    /D H5Oget_info_by_name_vers=1    /D H5O_info_t_vers=1     /D H5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,7 +146,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\itensor3;$(SolutionDir)itensor3\itensor\dependencies;$(ProjectDir)arma;C:\msys64\mingw64\include\OpenBLAS;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions>/D HAVE_LAPACK_CONFIG_H    /D LAPACK_COMPLEX_CPP    /D H5Oget_info_by_name_vers=1    /D H5O_info_t_vers=1     /D H5_BUILT_AS_DYNAMIC_LIB=1 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D HAVE_LAPACK_CONFIG_H    /D LAPACK_COMPLEX_CPP    /D H5Oget_info_by_name_vers=1    /D H5O_info_t_vers=1     /D H5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\operator_insertion\descend.cpp" />
     <ClCompile Include="src\TRG\GiltTNR.cpp" />
     <ClCompile Include="src\TRG\loopTNR.cpp" />
     <ClCompile Include="src\TRG\TEFR.cpp" />
@@ -754,6 +757,7 @@
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_bones.hpp" />
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp" />
     <ClInclude Include="src\inc.h" />
+    <ClInclude Include="src\operator_insertion\descend.h" />
     <ClInclude Include="src\sample\fibo_exact.h" />
     <ClInclude Include="src\sample\ising_trg.h" />
     <ClInclude Include="src\sample\tnr_test.h" />

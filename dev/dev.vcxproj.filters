@@ -48,6 +48,9 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\operator_insertion\descend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sample\fibo_exact.h">
@@ -1839,6 +1842,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\operator_insertion\descend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
