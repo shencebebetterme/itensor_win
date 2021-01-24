@@ -33,12 +33,10 @@ void tensor_log() {
 	denseT = real(arma::logmat(denseT));
 	denseT.print("denseT");
 
-	PrintData(A);
 
-
-	PrintData(A);
-
-	//todo: obtain an ITensor from arma mat
+	ITensor logA = extract_it(denseT);
+	PrintData(logA);
+	//restore indices
 
 	//todo: how to directly change the stored memory of an ITensor
 

@@ -43,10 +43,10 @@ ITensor extract_it(arma::mat M) {
     Index j(nc, "j");
     ITensor A(i, j);
 
-    for(auto ir:range1(nr))
-        for (auto ic : range1(nc)) {
+    for(auto ir:range(nr))
+        for (auto ic : range(nc)) {
             double val = M(ir, ic);
-            A.set(i = ir, j = ic, 0);
+            A.set(i = ir+1, j = ic+1, val);
         }
 
     return A;
