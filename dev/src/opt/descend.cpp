@@ -1,14 +1,8 @@
 #include "descend.h"
 
 // matrix log of a square tensor
-void tensor_log() {
-	const double beta_c = 0.5 * log(1 + sqrt(2));
-	ITensor A0 = database::ising2d(beta_c);
-	//A0.randomize();
-	constexpr int n_chain = 2;
-
-	ITensor A = glue_bare_ring(A0, n_chain);
-	//PrintData(A);
+// the up and down indexsets have tags "u" and "d"
+ITensor tensor_log(ITensor A) {
 
 	IndexSet u_is = findInds(A, "u");
 	IndexSet d_is = findInds(A, "d");
@@ -36,9 +30,13 @@ void tensor_log() {
 
 	ITensor logA = extract_it(denseT);
 	PrintData(logA);
-	//restore indices
-
 	//todo: how to directly change the stored memory of an ITensor
 
 	//todo: match indices, then contract with uT and dT to restore index structure
+	//restore indices
+	logA.replaceInds({ logA.index(1),logA.index(2) }, { A.index(1),A.index(2) });
+	logA = uT * logA * dT;
+	//PrintData(logA);
+
+	return logA;
 }
