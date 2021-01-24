@@ -33,7 +33,7 @@ ITensor glue_bare_ring(const ITensor& A, int n) {
 
 // glue a ring of 4-leg tensors A with tags "u","r","d","l"
 // output a rank-2 tensor
-ITensor glue(const ITensor& A, int n, bool twist) {
+ITensor glue(const ITensor& A, int n, bool twist, bool comb) {
 	if (n == 1) return A;
 
 	ITensor res;
@@ -79,8 +79,12 @@ ITensor glue(const ITensor& A, int n, bool twist) {
 		res.swapInds({u}, u_rest);
 	}
 	
-	res *= uT;
-	res *= dT;
 
-	return res;
+	if (!comb) return res;
+	else {
+		res *= uT;
+		res *= dT;
+		return res;
+	}
+
 }
