@@ -51,6 +51,40 @@ int main() {
 	ITensor L0 = (sum - diff) / 2;
 	Print(L0);
 
-	//rotation matrix
+	ITensor Lm1 = L0; //L-1
+	//apply rotation matrix to down legs according to prime level
+	IndexSet Uis = findInds(L0, "u");
+	IndexSet Dis = findInds(L0, "d");
+	for (auto id : Dis) {
+		double theta = 2 * PI * primeLevel(id) / n_chain;
+		double cos_theta = std::cos(theta);
+		double sin_theta = std::sin(theta);
+
+		Index idp = addTags(id, "ex");
+		ITensor gi(id, idp);
+		// apply gauge
+		if (dim(id) == 2 ) {
+			gi.set(id = 1, idp = 1, cos_theta);
+			gi.set(id = 1, idp = 2, -sin_theta);
+			gi.set(id = 2, idp = 1, sin_theta);
+			gi.set(id = 2, idp = 2, cos_theta);
+		}
+		Lm1 *= gi;
+	}
+	Lm1.removeTags("ex");
+
+	//todo: change L0 and L1 tensor into matrix
+	auto [uT, Uidx] = combiner(Uis);
+	auto [dT, Didx] = combiner(Dis);
+	L0 = uT * L0 * dT;
+	Lm1 = uT * Lm1 * dT;
+	auto L0mat = extract_cxmat(L0);
+	auto Lm1mat = extract_cxmat(Lm1);
+	L0mat.print("L0mat"); Lm1mat.print("L1mat");
+
+	arma::cx_mat comm = Lm1mat * L0mat - L0mat * Lm1mat;
+	(comm - Lm1mat).print("diff");
+
+	//todo: enable debug mode hasIndex() and error stack
 }
 
