@@ -33,10 +33,9 @@ void testCFT(ITensor A) {
 int main() {
 	const double beta_c = 0.5 * log(1 + sqrt(2));
 	ITensor A0 = database::ising2d(beta_c);
-	//A0.randomize();
+	
 	constexpr int n_chain = 2;
-
 	ITensor A = glue_bare_ring(A0, n_chain);
-	//PrintData(A);
+	ITensor logA = tensor_log(A);
 }
 

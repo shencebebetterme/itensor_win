@@ -35,8 +35,26 @@ arma::mat extract_mat(const ITensor& T) {
 }
 
 
+arma::cx_mat extract_cxmat(const ITensor& T) {
+    Index i = T.index(1);
+    Index j = T.index(2);
+	auto di = i.dim();
+	auto dj = j.dim();
+
+    arma::cx_mat denseT(di, dj);
+
+	for (auto ir : range(di))
+		for (auto ic : range(dj)) {
+            Cplx val = eltC(T, i = ir + 1, j = ic + 1);
+            denseT(ir, ic) = val;
+		}
+
+    return denseT;
+}
+
+
 // extract a rank-2 ITensor from an arma::mat
-ITensor extract_it(arma::mat M) {
+ITensor extract_it(arma::mat& M) {
     int nr = M.n_rows;
     int nc = M.n_cols;
     Index i(nr, "i");
