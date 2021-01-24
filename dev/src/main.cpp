@@ -37,7 +37,7 @@ int main() {
 	const double f_ising = 0.929695;//free energy per site
 	const double fA = f_ising * 2; //free energy per A tensor
 	
-	constexpr int n_chain = 3;
+	constexpr int n_chain = 4;
 	ITensor MT = glue(A0, n_chain, true, false);
 	//Print(MT);
 	double factor = std::exp((2 * PI / n_chain) * (c_ising / 12) + n_chain * fA);

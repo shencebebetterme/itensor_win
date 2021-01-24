@@ -72,11 +72,17 @@ ITensor glue(const ITensor& A, int n, bool twist, bool comb) {
 	if (twist) {
 		Index u = findIndex(A, "u"); //this unprimed index is also shared by res
 
-		res.addTags("first", { u });
+		/*res.addTags("first", { u });
 		IndexSet u_rest = findIndsExcept(findInds(res, "u"), "first");
 		res.removeTags("first");
 
-		res.swapInds({u}, u_rest);
+		res.swapInds({u}, u_rest);*/
+
+		int len = u_is.order();
+		// indices in u_is have prime = 0,1,2 ,..., len-1
+		for (int i = 1; i < len; i++) {
+			res.swapInds({ u }, { prime(u,i) });
+		}
 	}
 	
 
