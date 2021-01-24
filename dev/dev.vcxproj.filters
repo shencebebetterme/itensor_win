@@ -48,7 +48,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\operator_insertion\descend.cpp">
+    <ClCompile Include="src\opt\descend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1844,7 +1844,7 @@
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\operator_insertion\descend.h">
+    <ClInclude Include="src\opt\descend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

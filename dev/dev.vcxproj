@@ -160,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\operator_insertion\descend.cpp" />
+    <ClCompile Include="src\opt\descend.cpp" />
     <ClCompile Include="src\TRG\GiltTNR.cpp" />
     <ClCompile Include="src\TRG\loopTNR.cpp" />
     <ClCompile Include="src\TRG\TEFR.cpp" />
@@ -757,7 +757,7 @@
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_bones.hpp" />
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp" />
     <ClInclude Include="src\inc.h" />
-    <ClInclude Include="src\operator_insertion\descend.h" />
+    <ClInclude Include="src\opt\descend.h" />
     <ClInclude Include="src\sample\fibo_exact.h" />
     <ClInclude Include="src\sample\ising_trg.h" />
     <ClInclude Include="src\sample\tnr_test.h" />

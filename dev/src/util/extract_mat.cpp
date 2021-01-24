@@ -33,3 +33,21 @@ arma::mat extract_mat(const ITensor& T) {
     arma::mat denseT(&data_vec[0], di, dj, true);
     return denseT;
 }
+
+
+// extract a rank-2 ITensor from an arma::mat
+ITensor extract_it(arma::mat M) {
+    int nr = M.n_rows;
+    int nc = M.n_cols;
+    Index i(nr, "i");
+    Index j(nc, "j");
+    ITensor A(i, j);
+
+    for(auto ir:range1(nr))
+        for (auto ic : range1(nc)) {
+            double val = M(ir, ic);
+            A.set(i = ir, j = ic, 0);
+        }
+
+    return A;
+}

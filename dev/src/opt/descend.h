@@ -10,3 +10,5 @@
 
 using namespace itensor;
 using namespace std;
+
+void tensor_log();
