@@ -69,3 +69,21 @@ ITensor extract_it(arma::mat& M) {
 
     return A;
 }
+
+
+// extract a rank-2 ITensor from an arma::cx_mat
+ITensor extract_it(arma::cx_mat& M) {
+	int nr = M.n_rows;
+	int nc = M.n_cols;
+	Index i(nr, "i");
+	Index j(nc, "j");
+	ITensor A(i, j);
+
+	for (auto ir : range(nr))
+		for (auto ic : range(nc)) {
+			Cplx val = M(ir, ic);
+			A.set(i = ir + 1, j = ic + 1, val);
+		}
+
+	return A;
+}

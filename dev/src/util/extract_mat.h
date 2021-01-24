@@ -11,6 +11,7 @@ arma::mat extract_mat(const ITensor&);
 arma::cx_mat extract_cxmat(const ITensor& T);
 
 ITensor extract_it(arma::mat& M);
+ITensor extract_it(arma::cx_mat& M);
 
 
 /*

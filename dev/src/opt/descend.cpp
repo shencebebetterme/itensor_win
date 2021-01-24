@@ -11,20 +11,9 @@ ITensor tensor_log(ITensor A) {
 
 	A = uT * A * dT;//now A has order 2
 	//PrintData(A);
-	int di = A.index(1).dim();
-	int dj = A.index(2).dim();
+	arma::cx_mat denseT = extract_cxmat(A);
 
-	auto extractReal = [](Dense<Real> const& d)
-	{
-		return d.store;
-	};
-
-	auto data_vec = applyFunc(extractReal, A.store());
-
-	arma::mat denseT(&data_vec[0], di, dj, true);
-	//denseT.print("denseT");
-
-	denseT = real(arma::logmat(denseT));
+	denseT = arma::logmat(denseT);
 	//denseT.print("denseT");
 
 
