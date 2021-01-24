@@ -12,7 +12,8 @@ ITensor tensor_log(ITensor A) {
 	A = uT * A * dT;//now A has order 2
 	//PrintData(A);
 	arma::cx_mat denseT = extract_cxmat(A);
-
+	//stupid workaround of degenerate eigenvalues
+	denseT += 1E-15 * randu<cx_mat>(denseT.n_rows, denseT.n_cols);
 	denseT = arma::logmat(denseT);
 	//denseT.print("denseT");
 

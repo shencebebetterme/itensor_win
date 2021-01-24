@@ -37,9 +37,9 @@ int main() {
 	const double f_ising = 0.929695;//free energy per site
 	const double fA = f_ising * 2; //free energy per A tensor
 	
-	constexpr int n_chain = 2;
-	ITensor MT = glue(A0, n_chain, true);
-	Print(MT);
+	constexpr int n_chain = 3;
+	ITensor MT = glue(A0, n_chain, true, false);
+	//Print(MT);
 	double factor = std::exp((2 * PI / n_chain) * (c_ising / 12) + n_chain * fA);
 	MT /= factor; // remove central charge and free energy
 	ITensor logMT = tensor_log(MT);
@@ -47,7 +47,10 @@ int main() {
 	//obtain L0+L0bar and L0-L0bar
 	ITensor sum = -(n_chain / (2 * PI)) * realPart(logMT);
 	ITensor diff = (n_chain / (2 * PI)) * imagPart(logMT);
-	PrintData(sum); PrintData(diff);
-	//ITensor L0 = 
+	//PrintData(sum); PrintData(diff);
+	ITensor L0 = (sum - diff) / 2;
+	Print(L0);
+
+	//rotation matrix
 }
 
