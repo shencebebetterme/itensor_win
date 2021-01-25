@@ -54,31 +54,37 @@ arma::sp_mat extract_spmat(const ITensor& T) {
 // if copy=true, then there's one copy
 // if copy=false, then there's zero copy
 arma::mat* extract_mat(ITensor& T, bool copy) {
+    
+    if (!isReal(T)) {
+        std::cerr << "\nTensor not real!";
+        std::abort();
+    }
+
 	auto di = T.index(1).dim();
 	auto dj = T.index(2).dim();
 
 	auto pt = &((*((ITWrap<Dense<double>>*) & (*T.store()))).d.store[0]);
 	arma::mat* denseT = new arma::mat(pt, 2, 3, copy);
+
 	return denseT;
 }
 
 
 
-arma::cx_mat extract_cxmat(const ITensor& T) {
-    Index i = T.index(1);
-    Index j = T.index(2);
-	auto di = i.dim();
-	auto dj = j.dim();
+arma::cx_mat* extract_cxmat(ITensor& T, bool copy) {
 
-    arma::cx_mat denseT(di, dj);
+	if (!isComplex(T)) {
+		std::cerr << "\nTensor not complex!";
+		std::abort();
+	}
 
-	for (auto ir : range(di))
-		for (auto ic : range(dj)) {
-            Cplx val = eltC(T, i = ir + 1, j = ic + 1);
-            denseT(ir, ic) = val;
-		}
+	auto di = T.index(1).dim();
+	auto dj = T.index(2).dim();
 
-    return denseT;
+	auto pt = &((*((ITWrap<Dense<Cplx>>*) & (*T.store()))).d.store[0]);
+	arma::cx_mat* denseT = new arma::cx_mat(pt, di, dj, copy);
+
+	return denseT;
 }
 
 

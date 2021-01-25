@@ -11,7 +11,7 @@ ITensor tensor_log(ITensor A) {
 
 	A = uT * A * dT;//now A has order 2
 	//PrintData(A);
-	arma::cx_mat denseT = extract_cxmat(A);
+	arma::cx_mat denseT = *extract_cxmat(A);
 	//stupid workaround of degenerate eigenvalues
 	denseT += 1E-15 * randu<cx_mat>(denseT.n_rows, denseT.n_cols);
 	denseT = arma::logmat(denseT);
@@ -80,8 +80,8 @@ void local_gauge(int n_chain) {
 	auto [dT, Didx] = combiner(Dis);
 	L0 = uT * L0 * dT;
 	Lm1 = uT * Lm1 * dT;
-	auto L0mat = extract_cxmat(L0);
-	auto Lm1mat = extract_cxmat(Lm1);
+	auto L0mat = *extract_cxmat(L0);
+	auto Lm1mat = *extract_cxmat(Lm1);
 	//L0mat.print("L0mat"); Lm1mat.print("L1mat");
 
 	arma::cx_mat comm = Lm1mat * L0mat - L0mat * Lm1mat;
