@@ -73,7 +73,7 @@ int main() {
 	}
 	Lm1.removeTags("ex");
 
-	//todo: change L0 and L1 tensor into matrix
+	//change L0 and L1 tensor into matrix
 	auto [uT, Uidx] = combiner(Uis);
 	auto [dT, Didx] = combiner(Dis);
 	L0 = uT * L0 * dT;
@@ -84,7 +84,5 @@ int main() {
 
 	arma::cx_mat comm = Lm1mat * L0mat - L0mat * Lm1mat;
 	(comm - Lm1mat).print("diff");
-
-	//todo: enable debug mode hasIndex() and error stack
 }
 

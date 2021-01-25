@@ -18,3 +18,6 @@ std::string myprint_idx(const Index& idx);
 std::string myprint_is(const IndexSet& is);
 std::string myprint(const ITensor& A);
 std::vector<double> mypeek(const ITensor& A);
+
+vector_no_init<Real> peek(const ITensor& A);
+vector_no_init<Cplx> peek_cx(const ITensor& A);
