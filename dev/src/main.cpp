@@ -29,7 +29,7 @@ void testCFT(ITensor A) {
 }
 
 
-//todo: windows link to hdf5 and openmp
+
 int main() {
 	local_gauge(6);
 }
