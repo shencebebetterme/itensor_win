@@ -14,3 +14,5 @@ using namespace std;
 // matrix log of a square tensor
 // the up and down indexsets have tags "u" and "d"
 ITensor tensor_log(ITensor A);
+
+void local_gauge(int n_chain);
