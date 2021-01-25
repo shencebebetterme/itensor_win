@@ -19,20 +19,49 @@ arma::sp_mat extract_spmat(const ITensor& T) {
 */
 
 
-arma::mat extract_mat(const ITensor& T) {
-    auto di = T.index(1).dim();
-    auto dj = T.index(2).dim();
+//// directly copy the chunk of memory, index order verified
+//// copy twice
+//arma::mat extract_mat(const ITensor& T) {
+//    auto di = T.index(1).dim();
+//    auto dj = T.index(2).dim();
+//
+//    auto extractReal = [](Dense<Real> const& d)
+//    {
+//        return d.store;
+//    };
+//
+//    //the data is already copied to data_vec
+//    //copying data to this vector is the most time-consuming step
+//    auto data_vec = applyFunc(extractReal, T.store());
+//
+//    arma::mat denseT(&data_vec[0], di, dj, false);
+//    return denseT;
+//}
 
-    auto extractReal = [](Dense<Real> const& d)
-    {
-        return d.store;
-    };
 
-    auto data_vec = applyFunc(extractReal, T.store());
+// as fast as the following copy=true
+// but the data can be modified
+//arma::mat extract_mat(const ITensor& T) {
+//	auto di = T.index(1).dim();
+//	auto dj = T.index(2).dim();
+//
+//	auto pt = &((*((ITWrap<Dense<double>>*) & (*T.store()))).d.store[0]);
+//    arma::mat denseT(pt, di, dj, false);
+//    return denseT;
+//}
 
-    arma::mat denseT(&data_vec[0], di, dj, true);
-    return denseT;
+
+// if copy=true, then there's one copy
+// if copy=false, then there's zero copy
+arma::mat* extract_mat(ITensor& T, bool copy) {
+	auto di = T.index(1).dim();
+	auto dj = T.index(2).dim();
+
+	auto pt = &((*((ITWrap<Dense<double>>*) & (*T.store()))).d.store[0]);
+	arma::mat* denseT = new arma::mat(pt, 2, 3, copy);
+	return denseT;
 }
+
 
 
 arma::cx_mat extract_cxmat(const ITensor& T) {

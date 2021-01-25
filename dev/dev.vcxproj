@@ -760,6 +760,7 @@
     <ClInclude Include="src\opt\descend.h" />
     <ClInclude Include="src\sample\fibo_exact.h" />
     <ClInclude Include="src\sample\ising_trg.h" />
+    <ClInclude Include="src\sample\test_copy.h" />
     <ClInclude Include="src\sample\tnr_test.h" />
     <ClInclude Include="src\TRG\GiltTNR.h" />
     <ClInclude Include="src\TRG\loopTNR.h" />

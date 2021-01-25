@@ -1847,6 +1847,9 @@
     <ClInclude Include="src\opt\descend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\sample\test_copy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arma\armadillo" />

@@ -6,7 +6,9 @@ using namespace itensor;
 
 
 // rank-2 itensor to a dense matrix
-arma::mat extract_mat(const ITensor&);
+// if copy=false then change in mat will be reflected in T
+arma::mat* extract_mat(ITensor& T, bool copy = true);
+
 arma::cx_mat extract_cxmat(const ITensor& T);
 
 ITensor extract_it(arma::mat& M);
