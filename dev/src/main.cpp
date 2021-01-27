@@ -22,10 +22,10 @@ void testCFT(ITensor A) {
 	Print(A);
 	ITensor As = glue(A, 2);
 	Print(As);
-	arma::mat* Asmat = extract_mat(As);
+	arma::mat Asmat = extract_mat(As);
 	//Asmat.print("A");
 	printf("\n");
-	cd_dense(*Asmat, 5, 2, 1);
+	cd_dense(Asmat, 5, 2, 1);
 }
 
 
@@ -35,9 +35,16 @@ void testCFT(ITensor A) {
 
 
 
-#include "sample/ctmrg.h"
+//#include "sample/ctmrg.h"
 
 int main() {
-	ctmrg();
+	int n = (int) pow(2,13);
+	Index i(2, "i");
+	Index j(3, "j");
+	ITensor A = randomITensor(i, j);
+	//PrintData(A);
+
+	arma::mat Amat1 = extract_mat(A, true);
+	Amat1.randn();
 }
 

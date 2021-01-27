@@ -49,7 +49,7 @@ arma::mat* my_extract_mat2(ITensor& T) {
 }
 
 
-int main() {
+void test_copy() {
 	constexpr int n = 10000;
 	Index i(n, "i");
 	Index j(n, "j");
@@ -64,14 +64,14 @@ int main() {
 	std::cout << "extract_mat " << duration.count() / 1000000.0 << std::endl;
 
 	start = high_resolution_clock::now();
-	arma::mat* Amat2 = extract_mat_nocopy(A, true);
+	arma::mat Amat2 = extract_mat(A, true);
 	(*Amat2)(1, 1) = 1.0;
 	stop = high_resolution_clock::now();
 	duration = duration_cast<microseconds>(stop - start);
 	std::cout << "extract_mat_nocopy true " << duration.count() / 1000000.0 << std::endl;
 
 	start = high_resolution_clock::now();
-	arma::mat* Amat3 = extract_mat_nocopy(A, false);
+	arma::mat Amat3 = extract_mat(A, false);
 	(*Amat3)(1, 1) = 1.0;
 	stop = high_resolution_clock::now();
 	duration = duration_cast<microseconds>(stop - start);

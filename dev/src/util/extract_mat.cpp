@@ -53,7 +53,7 @@ arma::sp_mat extract_spmat(const ITensor& T) {
 
 // if copy=true, then there's one copy
 // if copy=false, then there's zero copy
-arma::mat* extract_mat(ITensor& T, bool copy) {
+arma::mat extract_mat(ITensor& T, bool copy) {
     
     if (!isReal(T)) {
         std::cerr << "\nTensor not real!";
@@ -64,14 +64,16 @@ arma::mat* extract_mat(ITensor& T, bool copy) {
 	auto dj = T.index(2).dim();
 
 	auto pt = &((*((ITWrap<Dense<double>>*) & (*T.store()))).d.store[0]);
-	arma::mat* denseT = new arma::mat(pt, 2, 3, copy);
+	//arma::mat* denseT = new arma::mat(pt, di, dj, copy);
+    // the final data in denseT is moved, so the overhead is negligible
+    arma::mat denseT(pt, di, dj, copy);
 
 	return denseT;
 }
 
 
 
-arma::cx_mat* extract_cxmat(ITensor& T, bool copy) {
+arma::cx_mat extract_cxmat(ITensor& T, bool copy) {
 
 	if (!isComplex(T)) {
 		std::cerr << "\nTensor not complex!";
@@ -82,7 +84,8 @@ arma::cx_mat* extract_cxmat(ITensor& T, bool copy) {
 	auto dj = T.index(2).dim();
 
 	auto pt = &((*((ITWrap<Dense<Cplx>>*) & (*T.store()))).d.store[0]);
-	arma::cx_mat* denseT = new arma::cx_mat(pt, di, dj, copy);
+	//arma::cx_mat* denseT = new arma::cx_mat(pt, di, dj, copy);
+    arma::cx_mat denseT(pt, di, dj, copy);
 
 	return denseT;
 }
