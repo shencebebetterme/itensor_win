@@ -36,15 +36,9 @@ void testCFT(ITensor A) {
 
 
 //#include "sample/ctmrg.h"
+#include "itensor/all.h"
 
 int main() {
-	int n = (int) pow(2,13);
-	Index i(2, "i");
-	Index j(3, "j");
-	ITensor A = randomITensor(i, j);
-	//PrintData(A);
-
-	arma::mat Amat1 = extract_mat(A, true);
-	Amat1.randn();
+	
 }
 

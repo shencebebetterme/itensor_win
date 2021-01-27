@@ -761,6 +761,7 @@
     <ClInclude Include="src\sample\ctmrg.h" />
     <ClInclude Include="src\sample\fibo_exact.h" />
     <ClInclude Include="src\sample\ising_trg.h" />
+    <ClInclude Include="src\sample\simple_gs.h" />
     <ClInclude Include="src\sample\test_copy.h" />
     <ClInclude Include="src\sample\tnr_test.h" />
     <ClInclude Include="src\TRG\GiltTNR.h" />
