@@ -758,6 +758,7 @@
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp" />
     <ClInclude Include="src\inc.h" />
     <ClInclude Include="src\opt\descend.h" />
+    <ClInclude Include="src\sample\ctmrg.h" />
     <ClInclude Include="src\sample\fibo_exact.h" />
     <ClInclude Include="src\sample\ising_trg.h" />
     <ClInclude Include="src\sample\test_copy.h" />

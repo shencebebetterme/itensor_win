@@ -31,36 +31,13 @@ void testCFT(ITensor A) {
 
 
 
-arma::cx_mat* my_extract_cxmat(const ITensor& T, bool copy) {
-	if (!isComplex(T)) {
-		std::cerr << "\nTensor not complex!";
-		std::abort();
-	}
 
-	auto di = T.index(1).dim();
-	auto dj = T.index(2).dim();
 
-	auto pt = &((*((ITWrap<Dense<Cplx>>*) & (*T.store()))).d.store[0]);
 
-	arma::cx_mat* denseT = new arma::cx_mat(pt, di, dj, copy);
 
-	return denseT;
-}
-
+#include "sample/ctmrg.h"
 
 int main() {
-	//constexpr int n = 10000;
-	Index i(2, "i");
-	Index j(3, "j");
-	ITensor A = randomITensorC(i, j);
-	PrintData(A);
-
-	arma::cx_mat& mat2 = *my_extract_cxmat(A, true);
-	(mat2)(0, 0) = 2.0+2.0i;
-	(mat2).print(); PrintData(A);
-
-	arma::cx_mat& mat3 = *my_extract_cxmat(A, false);
-	(mat3)(0, 0) = 3.0;
-	(mat3).print(); PrintData(A);
+	ctmrg();
 }
 

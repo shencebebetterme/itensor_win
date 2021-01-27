@@ -37,6 +37,8 @@ bld/
 */x64-Debug/
 */X64-Release/
 
+*.txt
+
 *.tlog
 *.ipdb
 *.recipe

@@ -88,6 +88,11 @@ arma::cx_mat* extract_cxmat(ITensor& T, bool copy) {
 }
 
 
+
+
+// very difficult to extract itensor with similar method
+// need to overload the allocator of vec_no_init
+
 // extract a rank-2 ITensor from an arma::mat
 ITensor extract_it(arma::mat& M) {
     int nr = M.n_rows;
