@@ -12,8 +12,8 @@ using namespace itensor;
 arma::mat extract_mat(ITensor& T, bool copy = true);
 arma::cx_mat extract_cxmat(ITensor& T, bool copy = true);
 
-ITensor extract_it(arma::mat& M);
-ITensor extract_it(arma::cx_mat& M);
+ITensor extract_it(const arma::mat& M);
+ITensor extract_it(const arma::cx_mat& M);
 
 
 /*

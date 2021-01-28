@@ -92,39 +92,40 @@ arma::cx_mat extract_cxmat(ITensor& T, bool copy) {
 
 
 // very difficult to extract itensor with similar method
-// need to overload the allocator of vec_no_init
+// need to overload the allocator of vec_no_init?
+// and also the .memptr() of arma::mat is const
+// so just copy the bunch of memory
+
+// https://stackoverflow.com/questions/2434196/how-to-initialize-stdvector-from-c-style-array
+// https://stackoverflow.com/questions/21917529/is-it-possible-to-initialize-stdvector-over-already-allocated-memory
 
 // extract a rank-2 ITensor from an arma::mat
-ITensor extract_it(arma::mat& M) {
+ITensor extract_it(const arma::mat& M) {
     int nr = M.n_rows;
     int nc = M.n_cols;
+
     Index i(nr, "i");
     Index j(nc, "j");
-    ITensor A(i, j);
+	ITensor A = setElt(0.0, i = 1, j = 1); // initialize a trivial ITensor
 
-    for(auto ir:range(nr))
-        for (auto ic : range(nc)) {
-            double val = M(ir, ic);
-            A.set(i = ir+1, j = ic+1, val);
-        }
+	vector_no_init<double>& dvec = (*((ITWrap<Dense<double>>*) & (*A.store()))).d.store;
+	dvec.assign(M.begin(), M.end()); //copy the bunch of memory rather than set value element-by-element
 
     return A;
 }
 
 
 // extract a rank-2 ITensor from an arma::cx_mat
-ITensor extract_it(arma::cx_mat& M) {
+ITensor extract_it(const arma::cx_mat& M) {
 	int nr = M.n_rows;
 	int nc = M.n_cols;
+
 	Index i(nr, "i");
 	Index j(nc, "j");
-	ITensor A(i, j);
+	ITensor A = setElt(Cplx(0.0,1.0), i = 1, j = 1); // initialize a trivial ITensor
 
-	for (auto ir : range(nr))
-		for (auto ic : range(nc)) {
-			Cplx val = M(ir, ic);
-			A.set(i = ir + 1, j = ic + 1, val);
-		}
+	vector_no_init<Cplx>& dvec = (*((ITWrap<Dense<Cplx>>*) & (*A.store()))).d.store;
+	dvec.assign(M.begin(), M.end());
 
 	return A;
 }

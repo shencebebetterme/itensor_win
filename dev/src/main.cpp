@@ -30,68 +30,43 @@ void testCFT(ITensor A) {
 
 
 
+// extract a rank-2 ITensor from an arma::mat
+ITensor my_extract_it(arma::mat& M) {
+	int nr = M.n_rows;
+	int nc = M.n_cols;
+	Index i(nr, "i");
+	Index j(nc, "j");
+	ITensor A = setElt(0.0, i = 1, j = 1);
+
+	vector_no_init<double>& dvec = (*((ITWrap<Dense<double>>*) & (*A.store()))).d.store;
+	dvec.assign(M.begin(), M.end());
+
+	return A;
+}
 
 
 
-
+//todo: extract_it for complex
 
 //#include "sample/ctmrg.h"
 #include "itensor/all.h"
 
 int main() {
-	int N = 6;
-	auto sites = SpinHalf(N);
-	auto indices = sites.inds();
+	//#define _ITERATOR_DEBUG_LEVEL 0;
 
-	auto psi = randomITensor(QN({ "Sz",0 }), indices);
+	//constexpr int n = 1000;
+	arma::cx_mat M(arma::randn(2,3), arma::randn(2, 3));
+	M.print("M");
+	auto start = M.begin();
+	auto end = M.end();
 
-	auto ampo = AutoMPO(sites);
-	for (auto j : range1(N - 1))
-	{
-		ampo += 0.5, "S+", j, "S-", j + 1;
-		ampo += 0.5, "S-", j, "S+", j + 1;
-		ampo += "Sz", j, "Sz", j + 1;
-	}
-	//ampo += "Sz", N, "Sz", 1; //periodic boundary condition?
-	auto Hmpo = toMPO(ampo);
+	std::vector<Cplx> vec(6);
+	vec.assign(start, end);
 
-	auto H = Hmpo(1);
-	for (auto j : range1(2, N)) H *= Hmpo(j);
-
-	//Create expH = exp(-tau*H)
-	auto expH = expHermitian(H, -8);
-
-	auto gs = psi; //initialize to psi
-	int Npass = 4;
-	for (int n = 1; n <= Npass; ++n)
-	{
-		println(n,"-th step");
-		gs *= expH;
-		gs.noPrime();
-		gs /= norm(gs);
-	}
-	Print(gs);
-
-
-	//Compute the ground state energy
-	auto E0 = elt(prime(dag(gs)) * H * gs);
-	Print(E0);
-
-
-	auto state = InitState(sites);
-	for (auto i : range1(N))
-	{
-		if (i % 2 == 1) state.set(i, "Up");
-		else         state.set(i, "Dn");
-	}
-
-	auto mps = randomMPS(state);
-	auto sweeps = Sweeps(4);
-	sweeps.maxdim() = 10, 10, 20, 20;
-	sweeps.cutoff() = 1E-10;
-
-	E0 = dmrg(mps, Hmpo, sweeps, { "Quiet",true });
-	
-	Print(E0);
+	ITensor A = extract_it(M);
+	PrintData(A);
+	A.set(1, 1, 10.0);
+	M.print("M");
+	//PrintData(A);
 }
 
