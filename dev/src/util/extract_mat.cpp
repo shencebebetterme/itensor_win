@@ -56,8 +56,7 @@ arma::sp_mat extract_spmat(const ITensor& T) {
 arma::mat extract_mat(ITensor& T, bool copy) {
     
     if (!isReal(T)) {
-        std::cerr << "\nTensor not real!";
-        std::abort();
+        Error("Tensor not real!");
     }
 
 	auto di = T.index(1).dim();
@@ -76,8 +75,7 @@ arma::mat extract_mat(ITensor& T, bool copy) {
 arma::cx_mat extract_cxmat(ITensor& T, bool copy) {
 
 	if (!isComplex(T)) {
-		std::cerr << "\nTensor not complex!";
-		std::abort();
+        Error("Tensor not complex!");
 	}
 
 	auto di = T.index(1).dim();

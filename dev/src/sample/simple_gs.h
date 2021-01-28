@@ -23,6 +23,7 @@ void simple_gs() {
 	auto H = Hmpo(1);
 	for (auto j : range1(2, N)) H *= Hmpo(j);
 
+	// imaginary time evolution
 	//Create expH = exp(-tau*H)
 	auto expH = expHermitian(H, -10);
 
