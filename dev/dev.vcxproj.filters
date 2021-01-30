@@ -51,6 +51,9 @@
     <ClCompile Include="src\opt\descend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TRG\radial_trans.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sample\fibo_exact.h">
@@ -1857,6 +1860,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\sample\idmrg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TRG\radial_trans.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sample\dmrg_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

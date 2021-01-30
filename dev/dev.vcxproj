@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\TRG\radial_trans.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\opt\descend.cpp" />
     <ClCompile Include="src\TRG\GiltTNR.cpp" />
@@ -756,6 +757,8 @@
     <ClInclude Include="arma\armadillo_bits\xtrans_mat_meat.hpp" />
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_bones.hpp" />
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp" />
+    <ClInclude Include="src\sample\dmrg_test.h" />
+    <ClInclude Include="src\TRG\radial_trans.h" />
     <ClInclude Include="src\inc.h" />
     <ClInclude Include="src\opt\descend.h" />
     <ClInclude Include="src\sample\ctmrg.h" />

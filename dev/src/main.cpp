@@ -46,27 +46,35 @@ ITensor my_extract_it(arma::mat& M) {
 
 
 
-//todo: extract_it for complex
+
 
 //#include "sample/ctmrg.h"
 #include "itensor/all.h"
 
 int main() {
-	//#define _ITERATOR_DEBUG_LEVEL 0;
+	int N = 8;
+	auto sites = SpinHalf(N);
+	auto indices = sites.inds();
 
-	//constexpr int n = 1000;
-	arma::cx_mat M(arma::randn(2,3), arma::randn(2, 3));
-	M.print("M");
-	auto start = M.begin();
-	auto end = M.end();
+	//auto psi = randomITensor(QN({ "Sz",0 }), indices);
 
-	std::vector<Cplx> vec(6);
-	vec.assign(start, end);
+	auto ampo = AutoMPO(sites);
+	for (auto j : range1(N - 1))
+	{
+		ampo += -4, "Sz", j, "Sz", j + 1;
+		ampo += -2, "Sx", j;
+	}
+	ampo += -4, "Sz", N, "Sz", 1;
+	ampo += -2, "Sx", N;
+	//ampo += "Sz", N, "Sz", 1; //periodic boundary condition?
+	auto Hmpo = toMPO(ampo);
 
-	ITensor A = extract_it(M);
-	PrintData(A);
-	A.set(1, 1, 10.0);
-	M.print("M");
-	//PrintData(A);
+	auto H = Hmpo(1);
+	for (auto j : range1(2, N)) H *= Hmpo(j);
+
+	H = removeQNs(H);
+	Print(H);
+
+	auto [U, D] = eigen(H);
 }
 

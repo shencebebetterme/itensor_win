@@ -48,3 +48,5 @@ void simple_gs() {
 	auto var = elt(prime(dag(gs)) * H2 * gs) - (E0 * E0);
 	Print(var);
 }
+
+
