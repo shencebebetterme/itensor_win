@@ -277,6 +277,7 @@ my_arnoldi(const ITensorMap& A,
 				}
 
 				//PrintData(B);
+				//todo: in the case where some eigenvalues are all degenerate, replace inv(B) by some other matrix
 
 				// calculate B^-1 * theta
 				arma::cx_mat Bmat = extract_cxmat(B, false);
