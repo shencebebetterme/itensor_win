@@ -230,10 +230,64 @@ my_arnoldi(const ITensorMap& A,
 
 		//Compute w^th eigenvector of A
 		//Cout << Format("Computing eigenvector %d") % w << Endl;
-			phi.at(w) = Complex(YR(0, n), YI(0, n)) * V.at(0);
+		 
+		 
+			//todo: make the eigenvectors correct
+			//phi.at(w) = Complex(YR(0, n), YI(0, n)) * V.at(0);
+			//for (int j = 1; j < niter; ++j)
+			//{
+			//	phi.at(w) += Complex(YR(j, n), YI(j, n)) * V.at(j);
+			//}
+
+			// phi.at(w) = psi - sum_i x_i * phi[i]
+			ITensor psi = Complex(YR(0, n), YI(0, n)) * V.at(0);
 			for (int j = 1; j < niter; ++j)
 			{
-				phi.at(w) += Complex(YR(j, n), YI(j, n)) * V.at(j);
+				psi += Complex(YR(j, n), YI(j, n)) * V.at(j);
+			}
+
+			if (w == 0) phi.at(w) = psi;
+			else if (w > 0)
+			{
+				// construct theta vector
+				std::vector<Complex> theta = {};
+				theta.reserve(w);
+				
+				for (int j = 0; j < w; j++) {
+					Complex z1, z2, s = 0;
+					for (int k = 0; k < w; k++) {
+						gmres_details::dot(phi[j], phi[k], z1);
+						gmres_details::dot(phi[k], psi, z2);
+						s += eigs[k] * z1 * z2;
+					}
+					theta.push_back(s);
+				}
+
+
+				// construct matrix B
+				Index j(w,"j");
+				Index i(w,"i");
+				ITensor B(j, i);
+				for (int sj = 0; sj < w; sj++) {
+					Complex z = 0;
+					for (int si = 0; si < w; si++) {
+						gmres_details::dot(phi[sj], phi[si], z);
+						B.set(j = sj + 1, i = si + 1, (eigs[si] - eigs[w])*z);
+					}
+				}
+
+				//PrintData(B);
+
+				// calculate B^-1 * theta
+				arma::cx_mat Bmat = extract_cxmat(B, false);
+				arma::cx_vec theta_vec(theta);
+				arma::cx_vec x_vec = arma::inv(Bmat) * theta_vec;
+
+				// reconstruct eigs.at(w)
+				phi.at(w) = psi;
+				for (auto i = 0; i < w; i++) {
+					phi.at(w) -= x_vec[i] * phi.at(i);
+				}
 			}
 
 			//Print(YR.Column(1+n));

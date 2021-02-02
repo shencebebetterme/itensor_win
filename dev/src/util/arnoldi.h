@@ -4,6 +4,8 @@
 #include "itensor/util/print_macro.h"
 using namespace itensor;
 
+#include "../inc.h"
+#include "extract_mat.h"
 
 
 class ITensorMap
