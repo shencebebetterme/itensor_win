@@ -1,7 +1,6 @@
 #pragma once
 
-#include "itensor/all_basic.h"
-using namespace itensor;
+#include "../pch.h"
 
 
 namespace database {

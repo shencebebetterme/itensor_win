@@ -1,9 +1,6 @@
 #pragma once
 
-#include "itensor/all_basic.h"
-#include "itensor/util/print_macro.h"
-using namespace itensor;
-using namespace std;
+#include "../pch.h"
 
 //ITensor update(const ITensor& AA, const IndexSet& is, const int maxdim);
 

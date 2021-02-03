@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "arnoldi.h"
 
 // phi will be used to store the eigenvectors
@@ -32,6 +33,7 @@ my_arnoldi(const ITensorMap& A,
 	//////////////////////////////////////////////////////////////////////////////////
 	for (size_t j = 0; j < nget; ++j)
 	{
+		phi[j].randomize();
 		const Real nrm = norm(phi[j]);
 		if (nrm == 0.0)
 			Error("norm of 0 in arnoldi");
@@ -107,21 +109,27 @@ my_arnoldi(const ITensorMap& A,
 			////////////////////////////////////////////////////////////
 			// arnoldi iteration
 			////////////////////////////////////////////////////////////
+			bool deflated = false;
+			std::vector<ITensor> Vcopy = V;
 			for (int it = 0; it <= actual_maxiter; ++it)
 			{
 				const int j = it;
 				A.product(V.at(j), V.at(j + 1)); // V[j+1] = A*V[j]
-
-				// "Deflate" previous eigenpairs:
-				for (size_t o = 0; o < w; ++o)
-				{
-					//V[j+1] += (-eigs.at(o)*phi[o]*BraKet(phi[o],V[j+1]));
-					Complex overlap_;
-					//gmres_details::dot(phi[o], V[j + 1], overlap_);
-					gmres_details::dot(phi[o], V[j], overlap_);
-					V[j + 1] += (-eigs.at(o) * phi[o] * overlap_);
-					//V[j + 1].randomize();
-				}
+				Vcopy.at(j + 1) = V.at(j + 1);
+				//if (!deflated) {
+					// "Deflate" previous eigenpairs:
+					for (size_t o = 0; o < w; ++o)
+					{
+						//V[j+1] += (-eigs.at(o)*phi[o]*BraKet(phi[o],V[j+1]));
+						Complex overlap_;
+						//gmres_details::dot(phi[o], V[j + 1], overlap_);
+						gmres_details::dot(phi[o], V[j], overlap_);
+						auto diff = -eigs.at(o) * phi[o] * overlap_;
+						V[j + 1] += diff;
+						//V[j + 1].randomize();
+					}
+					//deflated = true;
+				//}
 
 				//Do Gram-Schmidt orthogonalization Npass times
 				//Build H matrix only on the first pass
@@ -133,6 +141,7 @@ my_arnoldi(const ITensorMap& A,
 						//Complex h = BraKet(V.at(i),V.at(j+1));
 						Complex h;
 						gmres_details::dot(V.at(i), V.at(j + 1), h);
+						//gmres_details::dot(Vcopy.at(i), V.at(j + 1), h);
 						if (pass == 1)
 						{
 							HR(i, j) = h.real();
@@ -178,6 +187,9 @@ my_arnoldi(const ITensorMap& A,
 											//since we have 'deflated' the previous ones
 				eigs.at(w) = Complex(D(n), DI(n));
 
+				//todo: find the second largest eigenvalue to speed up subsequent convergence
+
+
 				HrefR = subMatrix(HR, 0, j + 2, 0, j + 2);
 				HrefI = subMatrix(HI, 0, j + 2, 0, j + 2);
 
@@ -218,8 +230,14 @@ my_arnoldi(const ITensorMap& A,
 
 				++niter;
 
-				if (err < errgoal_) break;
+				if (err < errgoal_) {
+					std::cout << "\n for loop over j broken at step " << j << "\n";
+					break;
+				}
 
+				if (j == actual_maxiter) {
+					std::cout << "actual_maxiter reached, error is " << err << std::endl;
+				}
 			} // for loop over j
 
 		//Cout << Endl;
@@ -230,7 +248,6 @@ my_arnoldi(const ITensorMap& A,
 
 		//Compute w^th eigenvector of A
 		//Cout << Format("Computing eigenvector %d") % w << Endl;
-		 
 		 
 			//todo: make the eigenvectors correct
 			//phi.at(w) = Complex(YR(0, n), YI(0, n)) * V.at(0);
@@ -268,11 +285,13 @@ my_arnoldi(const ITensorMap& A,
 				Index j(w,"j");
 				Index i(w,"i");
 				ITensor B(j, i);
+				B.set(j = 1, i = 1, Complex(0, 1.0)); // stupid way to make B has complex elements
 				for (int sj = 0; sj < w; sj++) {
 					Complex z = 0;
 					for (int si = 0; si < w; si++) {
 						gmres_details::dot(phi[sj], phi[si], z);
-						B.set(j = sj + 1, i = si + 1, (eigs[si] - eigs[w])*z);
+						z *= (eigs[si] - eigs[w]);
+						B.set(j = sj + 1, i = si + 1, z);
 					}
 				}
 
@@ -282,7 +301,8 @@ my_arnoldi(const ITensorMap& A,
 				// calculate B^-1 * theta
 				arma::cx_mat Bmat = extract_cxmat(B, false);
 				arma::cx_vec theta_vec(theta);
-				arma::cx_vec x_vec = arma::inv(Bmat) * theta_vec;
+				//arma::cx_vec x_vec = arma::inv(Bmat) * theta_vec;
+				arma::cx_vec x_vec = solve(Bmat, theta_vec);
 
 				// reconstruct eigs.at(w)
 				phi.at(w) = psi;
@@ -300,10 +320,15 @@ my_arnoldi(const ITensorMap& A,
 			else
 				randomize(phi.at(w));
 
-			if (err < errgoal_) break;
-
+			if (err < errgoal_) {
+				std::cout << "\n for loop over r broken at step " << r << "\n";
+				break;
+			}
 			//otherwise restart using the phi.at(w) computed above
 
+			if (r == maxrestart_) {
+				std::cout << "\n maxrestart_ reached, error is " << err << "\n\n\n";
+			}
 		} // for loop over r
 
 	} // for loop over w

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../inc.h"
-using namespace itensor;
+#include "../pch.h"
 
 
 

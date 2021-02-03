@@ -1,7 +1,6 @@
 #pragma once
 
-#include "itensor/all_basic.h"
-#include "itensor/util/print_macro.h"
+#include "../pch.h"
 
 #include "../util/database.h"
 #include "../util/extract_mat.h"

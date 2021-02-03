@@ -1,8 +1,6 @@
 #pragma once
 
-#include "itensor/all_basic.h"
-#include "itensor/util/print_macro.h"
-using namespace itensor;
+#include "../pch.h"
 
 ITensor trg(ITensor A, int maxdim, int scale);
 
