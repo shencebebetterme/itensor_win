@@ -44,22 +44,25 @@ void testCFT(ITensor A) {
 
 int main() {
 	auto i = Index(4, "i");
-	auto j = Index(5, "j");
-	auto k = Index(3, "k");
+	auto j = Index(10, "j");
+	auto k = Index(30, "k");
 	auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
+	A /= norm(A);
 	//auto A = randomITensor(i, prime(i));
 	//for (auto a : range1(i.dim()))
 	//	for (auto b : range1(i.dim()))
 	//		A.set(a, b, 0);
-	//A.set(1, 1, 100.0);
+	A.set(1, 2, 1,1,1,1, 0.1);
+	A /= norm(A);
+	//A /= norm(A);
 	////A.set(1, 2, 0);
 	////A.set(2, 1, 0);
 	//A.set(2, 2, 6.0);
 	//A.set(3, 3, 6.0);
 	//A.set(4, 4, -3.0);
 
-	auto [U, D] = eigen(A);
-	PrintData(D);
+	//auto [U, D] = eigen(A);
+	//PrintData(D);
 
 	auto AM = ITensorMap(A);
 
@@ -69,16 +72,16 @@ int main() {
 	//x1.set(2, 0.45);
 	//auto x2 = randomITensor(i);
 
-	constexpr int nvec = 6;
+	constexpr int nvec = 10;
 	std::vector<ITensor> xvec(nvec, x1);
 
 	//xvec = { x1,x2 };
 
-	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-14,"MaxIter=",100,"MaxRestart=",10,"Npass=",2 });
+	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-10,"MaxIter=",80,"MaxRestart=",5,"Npass=",2 });
 
 	for (auto i : range(nvec)) {
 		std::cout << lambda[i] << "\n";
-		PrintData(norm((A * xvec[i]).noPrime() - lambda[i] * xvec[i]));
+		PrintData(norm((A * xvec[i]).noPrime() - lambda[i] * xvec[i])/norm(lambda[i] * xvec[i]));
 		std::cout << std::endl;
 	}
 
