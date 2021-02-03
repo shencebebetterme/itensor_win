@@ -57,6 +57,7 @@ my_arnoldi(const ITensorMap& A,
 	std::string whicheig_ = args.getString("WhichEig", "LargestMagnitude");
 	const Real errgoal_ = args.getReal("ErrGoal", 1E-6);
 	const int debug_level_ = args.getInt("DebugLevel", -1);
+	bool is_Hermitian_ = args.getBool("IsHermitian", false);
 
 	if (maxiter_ < 1) maxiter_ = 1;
 	if (maxrestart_ < 0) maxrestart_ = 0;
@@ -304,49 +305,52 @@ my_arnoldi(const ITensorMap& A,
 			if (w == 0) phi.at(w) = psi;
 			else if (w > 0)
 			{
-				// construct theta vector
-				std::vector<Complex> theta = {};
-				theta.reserve(w);
-				
-				for (int j = 0; j < w; j++) {
-					Complex z1, z2, s = 0;
-					for (int k = 0; k < w; k++) {
-						gmres_details::dot(phi[j], phi[k], z1);
-						gmres_details::dot(phi[k], psi, z2);
-						s += eigs[k] * z1 * z2;
+				if (is_Hermitian_) phi.at(w) = psi;
+				else {
+					// construct theta vector
+					std::vector<Complex> theta = {};
+					theta.reserve(w);
+
+					for (int j = 0; j < w; j++) {
+						Complex z1, z2, s = 0;
+						for (int k = 0; k < w; k++) {
+							gmres_details::dot(phi[j], phi[k], z1);
+							gmres_details::dot(phi[k], psi, z2);
+							s += eigs[k] * z1 * z2;
+						}
+						theta.push_back(s);
 					}
-					theta.push_back(s);
-				}
 
 
-				// construct matrix B
-				Index j(w,"j");
-				Index i(w,"i");
-				ITensor B(j, i);
-				B.set(j = 1, i = 1, Complex(0, 1.0)); // stupid way to make B has complex elements
-				for (int sj = 0; sj < w; sj++) {
-					Complex z = 0;
-					for (int si = 0; si < w; si++) {
-						gmres_details::dot(phi[sj], phi[si], z);
-						z *= (eigs[si] - eigs[w]);
-						B.set(j = sj + 1, i = si + 1, z);
+					// construct matrix B
+					Index j(w, "j");
+					Index i(w, "i");
+					ITensor B(j, i);
+					B.set(j = 1, i = 1, Complex(0, 1.0)); // stupid way to make B has complex elements
+					for (int sj = 0; sj < w; sj++) {
+						Complex z = 0;
+						for (int si = 0; si < w; si++) {
+							gmres_details::dot(phi[sj], phi[si], z);
+							z *= (eigs[si] - eigs[w]);
+							B.set(j = sj + 1, i = si + 1, z);
+						}
 					}
-				}
 
-				//PrintData(B);
-				//todo: in the case where some eigenvalues are all degenerate, replace inv(B) by some other matrix
+					//PrintData(B);
+					//todo: in the case where some eigenvalues are all degenerate, replace inv(B) by some other matrix
 
-				// calculate B^-1 * theta
-				arma::cx_mat Bmat = extract_cxmat(B, false);
-				arma::cx_vec theta_vec(theta);
-				//std::cout << "when r=" << r << ", det(B)=" << arma::det(Bmat) << std::endl;
-				//arma::cx_vec x_vec = arma::inv(Bmat) * theta_vec;
-				arma::cx_vec x_vec = solve(Bmat, theta_vec);
+					// calculate B^-1 * theta
+					arma::cx_mat Bmat = extract_cxmat(B, false);
+					arma::cx_vec theta_vec(theta);
+					//std::cout << "when r=" << r << ", det(B)=" << arma::det(Bmat) << std::endl;
+					//arma::cx_vec x_vec = arma::inv(Bmat) * theta_vec;
+					arma::cx_vec x_vec = solve(Bmat, theta_vec);
 
-				// reconstruct eigs.at(w)
-				phi.at(w) = psi;
-				for (auto i = 0; i < w; i++) {
-					phi.at(w) -= x_vec[i] * phi.at(i);
+					// reconstruct eigs.at(w)
+					phi.at(w) = psi;
+					for (auto i = 0; i < w; i++) {
+						phi.at(w) -= x_vec[i] * phi.at(i);
+					}
 				}
 			}
 
@@ -370,7 +374,6 @@ my_arnoldi(const ITensorMap& A,
 			//		{
 			//			pwp += Complex(YR(j, n2), YI(j, n2)) * V.at(j);
 			//		}
-
 			//		const double nrm = norm(pwp);
 			//		if (nrm != 0) pwp /= nrm;
 			//	}
