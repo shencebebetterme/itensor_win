@@ -44,15 +44,17 @@ void testCFT(ITensor A) {
 
 int main() {
 	auto i = Index(4, "i");
-	auto j = Index(10, "j");
-	auto k = Index(30, "k");
+	auto j = Index(20, "j");
+	auto k = Index(2, "k");
 	auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
+	//auto At = swapTags(A, "0", "1");
+	//A += At;
 	A /= norm(A);
 	//auto A = randomITensor(i, prime(i));
 	//for (auto a : range1(i.dim()))
 	//	for (auto b : range1(i.dim()))
 	//		A.set(a, b, 0);
-	A.set(1, 2, 1,1,1,1, 0.1);
+	//A.set(1, 2, 1,1,1,1, 0.1);
 	A /= norm(A);
 	//A /= norm(A);
 	////A.set(1, 2, 0);
@@ -72,12 +74,12 @@ int main() {
 	//x1.set(2, 0.45);
 	//auto x2 = randomITensor(i);
 
-	constexpr int nvec = 10;
+	constexpr int nvec = 6;
 	std::vector<ITensor> xvec(nvec, x1);
 
 	//xvec = { x1,x2 };
 
-	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-10,"MaxIter=",80,"MaxRestart=",5,"Npass=",2 });
+	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-10,"MaxIter=",20,"MaxRestart=",5,"Npass=",2 });
 
 	for (auto i : range(nvec)) {
 		std::cout << lambda[i] << "\n";

@@ -103,7 +103,6 @@ my_arnoldi(const ITensorMap& A,
 		return eigs;
 	}
 
-	//in order for arnoldi to work, dim of operator can't be small?
 	auto actual_maxiter = std::min(maxiter_, maxsize - 1);
 
 	if (debug_level_ >= 2)
@@ -141,7 +140,7 @@ my_arnoldi(const ITensorMap& A,
 			Real err = 1000;
 			Matrix YR, YI; // store the eigenvectors
 			int n = 0; //which column of Y holds the w^th eigenvector
-			int n2 = 0; // which column holds the second largest eigenvector
+			//int n2 = 0; // which column holds the second largest eigenvector
 			int niter = 0;
 
 			//Mref holds current projection of A into V's
@@ -153,30 +152,24 @@ my_arnoldi(const ITensorMap& A,
 			////////////////////////////////////////////////////////////
 			// arnoldi iteration
 			////////////////////////////////////////////////////////////
-			bool deflated = false;
-			std::vector<ITensor> Vcopy = V;
 			for (int it = 0; it <= actual_maxiter; ++it)
 			{
 				const int j = it;
 				A.product(V.at(j), V.at(j + 1)); // V[j+1] = A*V[j]
-				Vcopy.at(j + 1) = V.at(j + 1);
-				//if (!deflated) {
 					// "Deflate" previous eigenpairs:
-					for (size_t o = 0; o < w; ++o)
-					{
-						//V[j+1] += (-eigs.at(o)*phi[o]*BraKet(phi[o],V[j+1]));
-						Complex overlap_;
-						//gmres_details::dot(phi[o], V[j + 1], overlap_);
-						gmres_details::dot(phi[o], V[j], overlap_);
-						auto diff = -eigs.at(o) * phi[o] * overlap_;
-						V[j + 1] += diff;
-						//V[j + 1].randomize();
-					}
-					//deflated = true;
-				//}
+				for (size_t o = 0; o < w; ++o)
+				{
+					//V[j+1] += (-eigs.at(o)*phi[o]*BraKet(phi[o],V[j+1]));
+					Complex overlap_;
+					//gmres_details::dot(phi[o], V[j + 1], overlap_);
+					gmres_details::dot(phi[o], V[j], overlap_);
+					//auto diff = -eigs.at(o) * phi[o] * overlap_;
+					V[j + 1] += -eigs.at(o) * phi[o] * overlap_;
+					//V[j + 1].randomize();
+				}
 
-				//Do Gram-Schmidt orthogonalization Npass times
-				//Build H matrix only on the first pass
+			//Do Gram-Schmidt orthogonalization Npass times
+			//Build H matrix only on the first pass
 				Real nh = NAN;
 				for (int pass = 1; pass <= Npass; ++pass)
 				{
@@ -212,77 +205,77 @@ my_arnoldi(const ITensorMap& A,
 				//Diagonalize projected form of A to
 				//obtain the w^th eigenvalue and eigenvector
 
-				//todo: don't do eigen while growing H
+
 					//store the real and imaginary part of eigenvalues
-					Vector D(1 + j), DI(1 + j);
+				Vector D(1 + j), DI(1 + j);
 
-					//TODO: eigen only takes a Matrix of Complex, not
-					//the real and imaginary parts seperately.
-					//Change it so that we don't have to allocate this
-					//Complex matrix
-					auto Hnrows = nrows(HrefR);
-					auto Hncols = ncols(HrefR);
-					CMatrix Href(Hnrows, Hncols);
-					for (size_t irows = 0; irows < Hnrows; irows++)
-						for (size_t icols = 0; icols < Hncols; icols++)
-							Href(irows, icols) = Complex(HrefR(irows, icols), HrefI(irows, icols));
+				//TODO: eigen only takes a Matrix of Complex, not
+				//the real and imaginary parts seperately.
+				//Change it so that we don't have to allocate this
+				//Complex matrix
+				auto Hnrows = nrows(HrefR);
+				auto Hncols = ncols(HrefR);
+				CMatrix Href(Hnrows, Hncols);
+				for (size_t irows = 0; irows < Hnrows; irows++)
+					for (size_t icols = 0; icols < Hncols; icols++)
+						Href(irows, icols) = Complex(HrefR(irows, icols), HrefI(irows, icols));
 
-					eigen(Href, YR, YI, D, DI);
-					n = findEig(D, DI, whicheig_); //continue to target the largest eig 
-												//since we have 'deflated' the previous ones
-					n2 = find2ndEig(D, DI);
-					eigs.at(w) = Complex(D(n), DI(n));
+				eigen(Href, YR, YI, D, DI);
+				n = findEig(D, DI, whicheig_); //continue to target the largest eig 
+											//since we have 'deflated' the previous ones
+				//n2 = find2ndEig(D, DI);
+				eigs.at(w) = Complex(D(n), DI(n));
 
 
-					HrefR = subMatrix(HR, 0, j + 2, 0, j + 2);
-					HrefI = subMatrix(HI, 0, j + 2, 0, j + 2);
+				HrefR = subMatrix(HR, 0, j + 2, 0, j + 2);
+				HrefI = subMatrix(HI, 0, j + 2, 0, j + 2);
 
-					HR(1 + j, j) = nh;
+				HR(1 + j, j) = nh;
 
-					//Estimate error || (A-l_j*I)*p_j || = h_{j+1,j}*[last entry of Y_j]
-					//See http://web.eecs.utk.edu/~dongarra/etemplates/node216.html
-					assert(nrows(YR) == size_t(1 + j));
-					err = nh * abs(Complex(YR(j, n), YI(j, n)));
-					assert(err >= 0);
+				//Estimate error || (A-l_j*I)*p_j || = h_{j+1,j}*[last entry of Y_j]
+				//See http://web.eecs.utk.edu/~dongarra/etemplates/node216.html
+				assert(nrows(YR) == size_t(1 + j));
+				err = nh * abs(Complex(YR(j, n), YI(j, n)));
+				assert(err >= 0);
 
-					if (debug_level_ >= 1)
+				if (debug_level_ >= 1)
+				{
+					if (r == 0)
+						printf("I %d e %.0E E", (1 + j), err);
+					else
+						printf("R %d I %d e %.0E E", r, (1 + j), err);
+
+					for (size_t j = 0; j <= w; ++j)
 					{
-						if (r == 0)
-							printf("I %d e %.0E E", (1 + j), err);
-						else
-							printf("R %d I %d e %.0E E", r, (1 + j), err);
-
-						for (size_t j = 0; j <= w; ++j)
+						if (fabs(eigs[j].real()) > 1E-6)
 						{
-							if (fabs(eigs[j].real()) > 1E-6)
-							{
-								if (fabs(eigs[j].imag()) > Approx0)
-									printf(" (%.10f,%.10f)", eigs[j].real(), eigs[j].imag());
-								else
-									printf(" %.10f", eigs[j].real());
-							}
+							if (fabs(eigs[j].imag()) > Approx0)
+								printf(" (%.10f,%.10f)", eigs[j].real(), eigs[j].imag());
 							else
-							{
-								if (fabs(eigs[j].imag()) > Approx0)
-									printf(" (%.5E,%.5E)", eigs[j].real(), eigs[j].imag());
-								else
-									printf(" %.5E", eigs[j].real());
-							}
+								printf(" %.10f", eigs[j].real());
 						}
-						println();
+						else
+						{
+							if (fabs(eigs[j].imag()) > Approx0)
+								printf(" (%.5E,%.5E)", eigs[j].real(), eigs[j].imag());
+							else
+								printf(" %.5E", eigs[j].real());
+						}
 					}
+					println();
+				}
 
-					++niter;
+				++niter;
 
-					if (err < errgoal_) {
-						std::cout << "\n for loop over j broken at step " << j << "\n";
-						break;
-					}
+				if (err < errgoal_) {
+					std::cout << "\n for loop over j broken at step " << j << "\n";
+					break;
+				}
 
-					if (j == actual_maxiter) {
-						std::cout << "actual_maxiter reached, error is " << err << std::endl;
-					}
-				
+				if (j == actual_maxiter) {
+					std::cout << "actual_maxiter reached, error is " << err << std::endl;
+				}
+
 			} // for loop over j
 
 		//Cout << Endl;
@@ -346,6 +339,7 @@ my_arnoldi(const ITensorMap& A,
 				// calculate B^-1 * theta
 				arma::cx_mat Bmat = extract_cxmat(B, false);
 				arma::cx_vec theta_vec(theta);
+				//std::cout << "when r=" << r << ", det(B)=" << arma::det(Bmat) << std::endl;
 				//arma::cx_vec x_vec = arma::inv(Bmat) * theta_vec;
 				arma::cx_vec x_vec = solve(Bmat, theta_vec);
 
@@ -367,20 +361,20 @@ my_arnoldi(const ITensorMap& A,
 
 
 			//todo: speed up subsequent convergence
-			if (err < errgoal_ || r == maxrestart_) {
-				// will leave the r loop and w -> w+1
-				if (w+1 < nget) {
-					ITensor& pwp = phi.at(w + 1);
-					pwp = Complex(YR(0, n2), YI(0, n2)) * V.at(0);
-					for (int j = 1; j < niter; ++j)
-					{
-						pwp += Complex(YR(j, n2), YI(j, n2)) * V.at(j);
-					}
+			//if (err < errgoal_ || r == maxrestart_) {
+			//	// will leave the r loop and w -> w+1
+			//	if (w+1 < nget) {
+			//		ITensor& pwp = phi.at(w + 1);
+			//		pwp = Complex(YR(0, n2), YI(0, n2)) * V.at(0);
+			//		for (int j = 1; j < niter; ++j)
+			//		{
+			//			pwp += Complex(YR(j, n2), YI(j, n2)) * V.at(j);
+			//		}
 
-					const double nrm = norm(pwp);
-					if (nrm != 0) pwp /= nrm;
-				}
-			}
+			//		const double nrm = norm(pwp);
+			//		if (nrm != 0) pwp /= nrm;
+			//	}
+			//}
 
 			if (err < errgoal_) {
 				std::cout << "\n for loop over r broken at step " << r << "\n";
