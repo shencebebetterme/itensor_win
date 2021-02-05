@@ -43,7 +43,7 @@ void testCFT(ITensor A) {
 //#include "util/arnoldi.h"
 
 int main() {
-	auto i = Index(100, "i");
+	auto i = Index(3, "i");
 	//auto j = Index(20, "j");
 	//auto k = Index(2, "k");
 	//auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
@@ -64,6 +64,13 @@ int main() {
 	//A.randomize();
 	//A.set(1, 2, 1,1,1,1, 0.1);
 	A /= norm(A);
+
+	IndexSet is = A.inds();
+	ITensor B(is);
+	auto val = Cplx(1.0, 1.0);
+	//B.set(*iterInds(is), val);
+	//PrintData(B);
+	char* w = const_cast<char*>("abc");
 	//A /= norm(A);
 	////A.set(1, 2, 0);
 	////A.set(2, 1, 0);
