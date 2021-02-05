@@ -182,8 +182,10 @@ my_arnoldi(const ITensorMap& A,
 						//gmres_details::dot(Vcopy.at(i), V.at(j + 1), h);
 						if (pass == 1)
 						{
-							HR(i, j) = h.real();
-							HI(i, j) = h.imag();
+							//if (i > w && j > w) {
+								HR(i, j) = h.real();
+								HI(i, j) = h.imag();
+							//}
 						}
 						V.at(j + 1) -= h * V.at(i);
 					}
@@ -235,6 +237,7 @@ my_arnoldi(const ITensorMap& A,
 
 				//Estimate error || (A-l_j*I)*p_j || = h_{j+1,j}*[last entry of Y_j]
 				//See http://web.eecs.utk.edu/~dongarra/etemplates/node216.html
+				// error of Ritz pair = norm(residual) * last element of eigenvector
 				assert(nrows(YR) == size_t(1 + j));
 				err = nh * abs(Complex(YR(j, n), YI(j, n)));
 				assert(err >= 0);
@@ -390,6 +393,10 @@ my_arnoldi(const ITensorMap& A,
 			}
 		} // for loop over r
 
+		//checking eigenvalue and eigenvectors
+		ITensor Av;
+		A.product(phi[w], Av);
+		std::cout << "checking eigenpair: " << norm(Av - eigs[w] * phi[w]) << std::endl;
 	} // for loop over w
 
 	return eigs;

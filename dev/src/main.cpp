@@ -40,20 +40,28 @@ void testCFT(ITensor A) {
 
 //#include "sample/ctmrg.h"
 //#include "itensor/all.h"
-#include "util/arnoldi.h"
+//#include "util/arnoldi.h"
 
 int main() {
-	auto i = Index(4, "i");
-	auto j = Index(20, "j");
-	auto k = Index(2, "k");
-	auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
+	auto i = Index(100, "i");
+	//auto j = Index(20, "j");
+	//auto k = Index(2, "k");
+	//auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
+	//auto A = randomITensor(i, prime(i));
+	
+	// 
 	//auto At = swapTags(A, "0", "1");
 	//A += At;
-	A /= norm(A);
+	//A /= norm(A);
 	//auto A = randomITensor(i, prime(i));
-	//for (auto a : range1(i.dim()))
-	//	for (auto b : range1(i.dim()))
-	//		A.set(a, b, 0);
+	ITensor A(i, prime(i));
+	for (auto a : range1(i.dim()))
+		for (auto b : range1(i.dim()))
+		{
+			double val = std::sin(0.5 * a + (0.3 * a) / b);
+			A.set(a, b, val);
+		}
+	//A.randomize();
 	//A.set(1, 2, 1,1,1,1, 0.1);
 	A /= norm(A);
 	//A /= norm(A);
@@ -66,10 +74,11 @@ int main() {
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 
+	/*
 	auto AM = ITensorMap(A);
 
-	auto x1 = randomITensor(i, j, k);
-	//auto x1 = randomITensor(i);
+	//auto x1 = randomITensor(i, j, k);
+	auto x1 = randomITensor(i);
 	//x1.set(1, 0.98);
 	//x1.set(2, 0.45);
 	//auto x2 = randomITensor(i);
@@ -79,13 +88,13 @@ int main() {
 
 	//xvec = { x1,x2 };
 
-	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-10,"MaxIter=",20,"MaxRestart=",5,"Npass=",2 });
+	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-10,"MaxIter=",60,"MaxRestart=",5,"Npass=",2 });
 
 	for (auto i : range(nvec)) {
 		std::cout << lambda[i] << "\n";
-		PrintData(norm((A * xvec[i]).noPrime() - lambda[i] * xvec[i])/norm(lambda[i] * xvec[i]));
+		PrintData(norm((A * xvec[i]).noPrime() - lambda[i] * xvec[i]));
 		std::cout << std::endl;
 	}
-
+	*/
 }
 

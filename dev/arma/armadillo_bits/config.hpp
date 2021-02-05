@@ -37,7 +37,7 @@
 #endif
 
 #if !defined(ARMA_USE_ARPACK)
-//#define ARMA_USE_ARPACK
+#define ARMA_USE_ARPACK
 //// Uncomment the above line if you have ARPACK or a high-speed replacement for ARPACK.
 //// ARPACK is required for eigen decompositions of complex sparse matrices
 #endif
