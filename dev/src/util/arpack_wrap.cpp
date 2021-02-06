@@ -149,7 +149,6 @@ run_aupd
 			// operator*(sp_mat, vec) doesn't properly put the result into the
 			// right place so we'll just reimplement it here for now...
 
-			//todo: overload this mat-vec product
 			
 			//// Set the output to point at the right memory.  We have to subtract
 			//// one from FORTRAN pointers...
@@ -157,6 +156,7 @@ run_aupd
 			//// Set the input to point at the right memory.
 			//Col<T> in(workd.memptr() + ipntr(0) - 1, n, false /* don't copy */);
 			
+			//todo: avoid this memory copying by modifying the allocator of vector_no_init
 			// copy the memory to itensor it_x, do contraction, then copy memory of y back
 			dvecx.assign(workd + *ipntr - 1, workd + *ipntr - 1 + n);
 			AMap.product(it_x, it_y);
@@ -270,7 +270,80 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	neupd(&rvec, &howmny, select, dr, di, z, &ldz, (double*)NULL, (double*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
-	//todo: reorganize the eigenpairs into eigval and eigvecs
+	if (info != 0)
+	{
+		std::cout << "\n eigs_gen(): ARPACK error " << info << " in neupd()" << std::endl;
+		return false;
+	}
+
+
+	eigval = {};
+	eigvecs = {};
+
+	eigval.reserve(nev);
+	eigvecs.reserve(nev);
+
+	for (int i = 0; i < nev; ++i) {
+		eigval.emplace_back(*(dr + i), *(di + i));
+	}
+
+	IndexSet act_is = AMap.active_inds();
+
+	// reorganize the eigenvectors
+	for (int i = 0; i < nev; ++i) {
+
+		vector_no_init<Cplx> veci(n, 0); // store the extracted elements of veci
+		vector_no_init<Cplx> veci1(n, 0); // vec i+1
+
+		ITensor Ai;
+		ITensor Ai1;
+		Ai.set(*iterInds(act_is), Cplx(1.0, 1.0));
+		Ai1.set(*iterInds(act_is), Cplx(1.0, 1.0));
+		vector_no_init<Cplx>& dAi = (*((ITWrap<Dense<Cplx>>*) & (*Ai.store()))).d.store;
+		vector_no_init<Cplx>& dAi1 = (*((ITWrap<Dense<Cplx>>*) & (*Ai1.store()))).d.store;
+
+		// i and i+1 is a pair
+		if ((i < nev - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
+			for (int j = 0; j < n; ++j)
+			{
+				veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
+				veci1[j] = Cplx(z[n * i + j], -z[n * (i + 1) + j]);
+			}
+
+			dAi.assign(veci.begin(), veci.end());
+			dAi1.assign(veci1.begin(), veci1.end());
+			
+			eigvecs.push_back(Ai);
+			eigvecs.push_back(Ai1);
+
+			++i; // Skip the next one.
+		}
+
+		// if conjugate eigval don't match
+		else if ((i == nev - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
+			for (int j = 0; j < n; ++j)
+			{
+				veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
+			}
+
+			dAi.assign(veci.begin(), veci.end());
+
+			eigvecs.push_back(Ai);
+		}
+
+		// real eigenvalue
+		else {
+			for (int j = 0; j < n; ++j)
+			{
+				veci[j] = Cplx(z[n * i + j], 0);
+			}
+
+			dAi.assign(veci.begin(), veci.end());
+
+			eigvecs.push_back(Ai);
+		}
+	}
+
 
 	//clear memory
 	delete[] v;

@@ -69,7 +69,7 @@ int main() {
 	auto AM = ITensorMap(A);
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack(eigval, eigvecs, AM, {"NEV=",1});
+	itwrap::eig_arpack(eigval, eigvecs, AM, {"NEV=",2,"ErrGoal=1E-5"});
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 
