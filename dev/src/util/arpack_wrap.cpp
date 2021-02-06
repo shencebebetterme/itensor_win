@@ -198,11 +198,12 @@ run_aupd
 bool
 eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMap& AMap, Args const& args)
 {
-	int nev = args.getInt("NEV", 1);//number of wanted eigenpairs
-	int maxiter_ = args.getInt("MaxIter", 10);
+	int nev = args.getInt("nev", 1);//number of wanted eigenpairs
+	int maxiter_ = args.getInt("MaxIter", 300);
 	int maxrestart_ = args.getInt("MaxRestart", 0);
-	double tol = args.getReal("ErrGoal", 1E-4);
+	double tol = args.getReal("ErrGoal", 1E-10);
 	bool sym = args.getBool("RealSymmetric", false);
+	bool re_eigvec = args.getBool("ReEigvec", false);
 	std::string whicheig = args.getString("WhichEig", "LM");
 
 	char* which = const_cast<char*>(whicheig.c_str());
@@ -266,7 +267,8 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	std::memset(z, 0, n * (nev + 1) * sizeof(double));
 
 	int ldz = n;
-	double* workev = new double[3 * nev];
+	double* workev = new double[3 * ncv];
+
 
 	neupd(&rvec, &howmny, select, dr, di, z, &ldz, (double*)NULL, (double*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
@@ -289,61 +291,64 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	IndexSet act_is = AMap.active_inds();
 
-	// reorganize the eigenvectors
-	for (int i = 0; i < nev; ++i) {
+	if (re_eigvec)
+	{
+		// reorganize the eigenvectors
+		for (int i = 0; i < nev; ++i) {
 
-		vector_no_init<Cplx> veci(n, 0); // store the extracted elements of veci
-		vector_no_init<Cplx> veci1(n, 0); // vec i+1
+			vector_no_init<Cplx> veci(n, 0); // store the extracted elements of veci
+			vector_no_init<Cplx> veci1(n, 0); // vec i+1
 
-		ITensor Ai;
-		ITensor Ai1;
-		Ai.set(*iterInds(act_is), Cplx(1.0, 1.0));
-		Ai1.set(*iterInds(act_is), Cplx(1.0, 1.0));
-		vector_no_init<Cplx>& dAi = (*((ITWrap<Dense<Cplx>>*) & (*Ai.store()))).d.store;
-		vector_no_init<Cplx>& dAi1 = (*((ITWrap<Dense<Cplx>>*) & (*Ai1.store()))).d.store;
+			ITensor Ai(act_is);
+			ITensor Ai1(act_is);
+			Ai.set(*iterInds(act_is), Cplx(1.0, 1.0));
+			Ai1.set(*iterInds(act_is), Cplx(1.0, 1.0));
+			vector_no_init<Cplx>& dAi = (*((ITWrap<Dense<Cplx>>*) & (*Ai.store()))).d.store;
+			vector_no_init<Cplx>& dAi1 = (*((ITWrap<Dense<Cplx>>*) & (*Ai1.store()))).d.store;
 
-		// i and i+1 is a pair
-		if ((i < nev - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
-			for (int j = 0; j < n; ++j)
-			{
-				veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
-				veci1[j] = Cplx(z[n * i + j], -z[n * (i + 1) + j]);
+			// i and i+1 is a pair
+			if ((i < nev - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
+				for (int j = 0; j < n; ++j)
+				{
+					veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
+					veci1[j] = Cplx(z[n * i + j], -z[n * (i + 1) + j]);
+				}
+
+				dAi.assign(veci.begin(), veci.end());
+				dAi1.assign(veci1.begin(), veci1.end());
+
+				eigvecs.push_back(Ai);
+				eigvecs.push_back(Ai1);
+
+				++i; // Skip the next one.
 			}
 
-			dAi.assign(veci.begin(), veci.end());
-			dAi1.assign(veci1.begin(), veci1.end());
-			
-			eigvecs.push_back(Ai);
-			eigvecs.push_back(Ai1);
+			// if conjugate eigval don't match
+			else if ((i == nev - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
+				for (int j = 0; j < n; ++j)
+				{
+					veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
+				}
 
-			++i; // Skip the next one.
-		}
+				dAi.assign(veci.begin(), veci.end());
 
-		// if conjugate eigval don't match
-		else if ((i == nev - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
-			for (int j = 0; j < n; ++j)
-			{
-				veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
+				eigvecs.push_back(Ai);
 			}
 
-			dAi.assign(veci.begin(), veci.end());
+			// real eigenvalue
+			else {
+				for (int j = 0; j < n; ++j)
+				{
+					veci[j] = Cplx(z[n * i + j], 0);
+				}
 
-			eigvecs.push_back(Ai);
-		}
+				dAi.assign(veci.begin(), veci.end());
 
-		// real eigenvalue
-		else {
-			for (int j = 0; j < n; ++j)
-			{
-				veci[j] = Cplx(z[n * i + j], 0);
+				eigvecs.push_back(Ai);
 			}
-
-			dAi.assign(veci.begin(), veci.end());
-
-			eigvecs.push_back(Ai);
 		}
+
 	}
-
 
 	//clear memory
 	delete[] v;

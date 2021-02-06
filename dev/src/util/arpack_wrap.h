@@ -34,8 +34,8 @@ public:
 		}
 	}
 
+	// the unprimed indices of A are those of vector x
 	IndexSet active_inds() const{
-		// the unprimed indices of A are those of vector x
 		return findInds(A_, "0");
 	}
 
