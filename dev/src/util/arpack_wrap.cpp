@@ -123,7 +123,7 @@ run_aupd
 	vector_no_init<T>& dvecx = (*((ITWrap<Dense<T>>*) & (*it_x.store()))).d.store;
 
 	ITensor it_y = it_x;
-	vector_no_init<T>& dvecy = (*((ITWrap<Dense<T>>*) & (*it_y.store()))).d.store;
+	
 
 
 	// All the parameters have been set or created.  Time to loop a lot.
@@ -160,6 +160,7 @@ run_aupd
 			// copy the memory to itensor it_x, do contraction, then copy memory of y back
 			dvecx.assign(workd + *ipntr - 1, workd + *ipntr - 1 + n);
 			AMap.product(it_x, it_y);
+			vector_no_init<T>& dvecy = (*((ITWrap<Dense<T>>*) & (*it_y.store()))).d.store;
 			std::memcpy(workd + *(ipntr+1) - 1, &dvecy[0], n * sizeof(T));
 
 			break;
