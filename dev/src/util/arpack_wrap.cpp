@@ -246,7 +246,10 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	run_aupd<double>(nev, which, AMap, sym, n, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork,info);
 
-	if (info != 0) return false;//info=0 means normal exit of aupd
+	if (info != 0) {
+		if (info == 1) std::cout << "Maximum number of iterations taken in run_aupd." << std::endl;
+		if (info == -5) std::cout << "WhichEig must be one of 'LM', 'SM', 'LR', 'SR', 'LI', 'SI'" << std::endl;
+	}
 
 
 	//todo: call neupd to obtain the actual eigenpairs
@@ -272,6 +275,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	neupd(&rvec, &howmny, select, dr, di, z, &ldz, (double*)NULL, (double*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
+	//todo: give warning about other cases
 	if (info != 0)
 	{
 		std::cout << "\n eigs_gen(): ARPACK error " << info << " in neupd()" << std::endl;

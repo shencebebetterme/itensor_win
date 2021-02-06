@@ -44,8 +44,8 @@ void testCFT(ITensor A) {
 #include "util/arpack_wrap.h"
 
 int main() {
-	auto i = Index(20, "i");
-	//auto j = Index(20, "j");
+	auto i = Index(100, "i");
+	//auto j = Index(5, "j");
 	//auto k = Index(2, "k");
 	//auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
 	//auto A = randomITensor(i, prime(i));
@@ -66,13 +66,18 @@ int main() {
 	//A.set(1, 2, 1,1,1,1, 0.1);
 	A /= norm(A);
 
+	int nev = 5;
+
 	auto AM = ITensorMap(A);
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack(eigval, eigvecs, AM, {"nev=",2,"ReEigvec=",true});
+	itwrap::eig_arpack(eigval, eigvecs, AM, {"nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true});
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
-	std::cout<<norm(noPrime(A * eigvecs[0]) - eigval[0] * eigvecs[0]);
+	for (int i = 0; i < nev; i++) {
+		std::cout << norm(noPrime(A * eigvecs[i]) - eigval[i] * eigvecs[i]) << std::endl;
+	}
+	
 	int a = 1;
 
 	/*
