@@ -6,6 +6,7 @@
 // for arpack wrapper
 namespace itwrap {
 
+#if 0
 // If real, then eT == eeT=double; if complex, eT == std::complex<eeT>.
 // For real calls, rwork is ignored; it's only necessary in the complex case.
 template<typename eT, typename eeT>
@@ -58,8 +59,35 @@ neupd(blas_int* rvec, char* howmny, blas_int* select, eT* dr, eT* di, eT* z, bla
 	else if (is_cx_double<eT>::value) { typedef cx_double T; typedef double xT;  arma_fortran(arma_zneupd)(rvec, howmny, select, (T*)dr, (T*)z, ldz, (T*)sigmar, (T*)workev, bmat, n, which, nev, (xT*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, (xT*)rwork, info); }
 }
 
+#endif
 
-#if 0
+
+inline
+void
+naupd(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, double* resid, int* ncv, double* v, int* ldv, int* iparam, int* ipntr, double* workd, double* workl, int* lworkl, double* rwork, int* info)
+{
+	arma_type_check((is_supported_blas_type<double>::value == false));
+
+	 typedef double    T; 
+	 arma_ignore(rwork); 
+	 arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev, (T*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, info); 
+}
+
+inline
+void
+neupd(blas_int* rvec, char* howmny, blas_int* select, double* dr, double* di, double* z, blas_int* ldz, double* sigmar, double* sigmai, double* workev, char* bmat, blas_int* n, char* which, blas_int* nev, double* tol, double* resid, blas_int* ncv, double* v, blas_int* ldv, blas_int* iparam, blas_int* ipntr, double* workd, double* workl, blas_int* lworkl, double* rwork, blas_int* info)
+{
+	arma_type_check((is_supported_blas_type<double>::value == false));
+
+	 typedef double    T;
+	 arma_ignore(rwork); 
+	 arma_fortran(arma_dneupd)(rvec, howmny, select, (T*)dr, (T*)di, (T*)z, ldz, (T*)sigmar, (T*)sigmai, (T*)workev, bmat, n, which, nev, (T*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, info); 
+}
+
+
+
+
+
 //    eT=T=double
 // or eT=double, T=complex
 template<typename T>
@@ -67,12 +95,12 @@ inline
 void
 run_aupd
 (
-	const uword n_eigvals, char* which, ITensorMap& AMap, const bool sym,
-	blas_int& n, double& tol,
-	T* resid, blas_int& ncv, T* v, blas_int& ldv,
-	blas_int* iparam, blas_int* ipntr,
-	T* workd, T* workl, blas_int& lworkl, double* rwork,
-	blas_int& info
+	int nev, char* which, const ITensorMap& AMap, const bool sym,
+	int& n, double& tol,
+	T* resid, int& ncv, T* v, int& ldv,
+	int* iparam, int* ipntr,
+	T* workd, T* workl, int& lworkl, double* rwork,
+	int& info
 )
 {
 	// ARPACK provides a "reverse communication interface" which is an
@@ -81,57 +109,12 @@ run_aupd
 	// return code what we need to do next (usually a matrix-vector product) and
 	// then call it again.  So this results in some type of iterative process
 	// where we call saupd()/naupd() many times.
-	blas_int ido = 0; // This must be 0 for the first call.
+	int ido = 0; // This must be 0 for the first call.
 	char bmat = 'I'; // We are considering the standard eigenvalue problem.
-	n = AMap.size(); // The size of the matrix.
-	blas_int nev = n_eigvals;
+	
 
-	//resid.set_size(n);
-	resid = new T[n];
 
-	// Two contraints on NCV: (NCV > NEV + 2) and (NCV <= N)
-	// 
-	// We're calling either arpack::saupd() or arpack::naupd(),
-	// which have slighly different minimum constraint and recommended value for NCV:
-	// http://www.caam.rice.edu/software/ARPACK/UG/node136.html
-	// http://www.caam.rice.edu/software/ARPACK/UG/node138.html
-
-	ncv = nev + 2 + 1;
-
-	if (ncv < (2 * nev + 1)) { ncv = 2 * nev + 1; }
-	if (ncv > n) { ncv = n; }
-
-	//v.set_size(n * ncv); // Array N by NCV (output).
-	v = new T[n * ncv];
-	//rwork.set_size(ncv); // Work array of size NCV for complex calls.
-	rwork = new T[ncv];
-
-	ldv = n; // "Leading dimension of V exactly as declared in the calling program."
-
-	// IPARAM: integer array of length 11.
-	iparam.zeros(11);
-	iparam(0) = 1; // Exact shifts (not provided by us).
-	iparam(2) = 300; // Maximum iterations; all the examples use 300, but they were written in the ancient times.
-	iparam(6) = 1; // Mode 1: A * x = lambda * x.
-
-	// IPNTR: integer array of length 14 (output).
-	//ipntr.set_size(14);
-	ipntr = new int[14];
-
-	// Real work array used in the basic Arnoldi iteration for reverse communication.
-	//workd.set_size(3 * n);
-	workd = new T[3 * n];
-
-	// lworkl must be at least 3 * NCV^2 + 6 * NCV.
-	lworkl = 3 * (ncv * ncv) + 6 * ncv;
-
-	// Real work array of length lworkl.
-	//workl.set_size(lworkl);
-	workl = new T[lworkl];
-
-	info = 0; // Set to 0 initially to use random initial vector.
-
-	IndexSet& act_is = AMap.active_inds();
+	IndexSet act_is = AMap.active_inds();
 	ITensor it_x(act_is);
 	// make the store has type = double or complex
 	Cplx val(1.0, 1.0);
@@ -143,16 +126,14 @@ run_aupd
 	vector_no_init<T>& dvecy = (*((ITWrap<Dense<T>>*) & (*it_y.store()))).d.store;
 
 
-	//ITensor in = setElt(*IndexValIter(act_is), 1.0);
 	// All the parameters have been set or created.  Time to loop a lot.
 	while (ido != 99)
 	{
-		//todo: change the memptr() to normal pointer
 		// Call saupd() or naupd() with the current parameters.
-		if (sym)
-			saupd(&ido, &bmat, &n, which, &nev, &tol, resid.memptr(), &ncv, v.memptr(), &ldv, iparam.memptr(), ipntr.memptr(), workd.memptr(), workl.memptr(), &lworkl, &info);
-		else
-			naupd(&ido, &bmat, &n, which, &nev, &tol, resid.memptr(), &ncv, v.memptr(), &ldv, iparam.memptr(), ipntr.memptr(), workd.memptr(), workl.memptr(), &lworkl, rwork.memptr(), &info);
+		//if (sym)
+		//	saupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
+		//else
+			naupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
 		// What do we do now?
 		switch (ido)
@@ -177,23 +158,9 @@ run_aupd
 			//Col<T> in(workd.memptr() + ipntr(0) - 1, n, false /* don't copy */);
 			
 			// copy the memory to itensor it_x, do contraction, then copy memory of y back
-			dvecx.assign(workd.memptr() + ipntr(0) - 1, workd.memptr() + ipntr(0) - 1 + n);
+			dvecx.assign(workd + *ipntr - 1, workd + *ipntr - 1 + n);
 			AMap.product(it_x, it_y);
-			std::memcpy(workd.memptr() + ipntr(1) - 1, dvecy.begin(), n * sizeof(T));
-
-
-			//out.zeros();
-			//typename SpMat<T>::const_iterator x_it = X.begin();
-			//typename SpMat<T>::const_iterator x_it_end = X.end();
-
-			////implement the mat-vec product of a sparse matrix
-			//while (x_it != x_it_end)
-			//{
-			//	out[x_it.row()] += (*x_it) * in[x_it.col()];
-			//	++x_it;
-			//}
-
-			// No need to modify memory further since it was all done in-place.
+			std::memcpy(workd + *(ipntr+1) - 1, &dvecy[0], n * sizeof(T));
 
 			break;
 		}
@@ -223,42 +190,70 @@ run_aupd
 		return; // Parent frame can look at the value of info.
 	}
 
-	// clear memory
-	delete[] resid;
-	delete[] v;
-	delete[] rwork;
-	delete[] ipntr;
-	delete[] workd;
-	delete[] workl;
 }
-#endif
 
 
 //template<typename T>
-inline
 bool
 eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMap& AMap, Args const& args)
 {
-	int nev_ = args.getInt("NEV", 1);
+	int nev = args.getInt("NEV", 1);//number of wanted eigenpairs
 	int maxiter_ = args.getInt("MaxIter", 10);
 	int maxrestart_ = args.getInt("MaxRestart", 0);
-	const double errgoal_ = args.getReal("ErrGoal", 1E-6);
-	bool symm_ = args.getBool("RealSymmetric", false);
+	double tol = args.getReal("ErrGoal", 1E-4);
+	bool sym = args.getBool("RealSymmetric", false);
 	char* which = const_cast<char*>(args.getString("WhichEig", "LM").c_str());
 
-	if (nev_ + 1 >= AMap.size()) {
-		itensor::error("n_eigval + 1 > matrix size\n");
-	}
+	
 
 	//todo: calculate the needed space and allocate memory before calling run_aupd
-	int n, ncv, ldv, lworkl, info;
-	double tol = errgoal_;
-	double* resid, v, workd, workl;
-	int iparam[11], ipntr[14];
-	double* rwork; // Not used in the real case.
+	
+	int n = AMap.size();
+
+	if (nev + 1 >= n) {
+		Error("n_eigval + 1 > matrix size\n");
+	}
+
+	int ncv = nev + 2 + 1;
+
+	if (ncv < (2 * nev + 1)) { ncv = 2 * nev + 1; }
+	if (ncv > n) { ncv = n; }
+
+	int ldv = n;
+	int lworkl = 3 * (ncv * ncv) + 6 * ncv;
+	int info = 0; //Set to 0 initially to use random initial vector.
+
+	//double* resid, v, workd, workl;
+
+	double* v = new double[n * ncv];
+	double* resid = new double[n];
+	double* workd = new double[3 * n];
+	double* workl = new double[lworkl];
+	
+	int iparam[11] = { 0 };
+	iparam[0] = 1; // Exact shifts (not provided by us).
+	iparam[2] = maxiter_; // Maximum iterations; all the examples use 300.
+	iparam[6] = 1; // Mode 1: A * x = lambda * x.
+
+	int ipntr[14] = { 0 };
+
+	double* rwork = NULL; // Not used in the real case.
 
 	//todo: run_aupd
+	run_aupd<double>(nev, which, AMap, sym, n, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork,info);
 
+	if (info != 0) return false;//info=0 means normal exit of aupd
+
+	//todo: call neupd to obtain the actual eigenpairs
+
+
+	//todo: reorganize the eigenpairs into eigval and eigvecs
+
+	//clear memory
+	delete[] v;
+	delete[] resid;
+	delete[] workd;
+	delete[] workl;
 
 	return false;
 }

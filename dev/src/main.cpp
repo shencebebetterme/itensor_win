@@ -41,6 +41,7 @@ void testCFT(ITensor A) {
 //#include "sample/ctmrg.h"
 //#include "itensor/all.h"
 //#include "util/arnoldi.h"
+#include "util/arpack_wrap.h"
 
 int main() {
 	auto i = Index(3, "i");
@@ -65,19 +66,10 @@ int main() {
 	//A.set(1, 2, 1,1,1,1, 0.1);
 	A /= norm(A);
 
-	IndexSet is = A.inds();
-	ITensor B(is);
-	auto val = Cplx(1.0, 1.0);
-	//B.set(*iterInds(is), val);
-	//PrintData(B);
-	char* w = const_cast<char*>("abc");
-	//A /= norm(A);
-	////A.set(1, 2, 0);
-	////A.set(2, 1, 0);
-	//A.set(2, 2, 6.0);
-	//A.set(3, 3, 6.0);
-	//A.set(4, 4, -3.0);
-
+	auto AM = ITensorMap(A);
+	std::vector<Cplx> eigval = {};
+	std::vector<ITensor> eigvecs = {};
+	itwrap::eig_arpack(eigval, eigvecs, AM, {"NEV=",1});
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 

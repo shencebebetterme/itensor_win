@@ -34,7 +34,7 @@ public:
 		}
 	}
 
-	IndexSet active_inds() {
+	IndexSet active_inds() const{
 		// the unprimed indices of A are those of vector x
 		return findInds(A_, "0");
 	}
@@ -59,65 +59,7 @@ public:
 
 namespace itwrap {
 
-//! A lightweight array for POD types. For internal use only!
-template<typename eT>
-class itpodarray
-{
-public:
-
-	arma_aligned const uword n_elem; //!< number of elements held
-	arma_aligned       eT* mem;    //!< pointer to memory used by the object
-
-
-protected:
-	//! internal memory, to avoid calling the 'new' operator for small amounts of memory.
-	//arma_align_mem eT mem_local[podarray_prealloc_n_elem::val];
-
-
-public:
-
-	 ~itpodarray();
-	  itpodarray();
-
-	//inline                 itpodarray(const itpodarray& x);
-	//inline const itpodarray& operator=(const itpodarray& x);
-
-	//arma_inline explicit itpodarray(const uword new_N);
-	//
-	//arma_inline explicit itpodarray(const eT* X, const uword new_N);
-
-	// template<typename T1>
-	// inline explicit podarray(const Proxy<T1>& P);
-
-	arma_inline eT& operator[] (const uword i);
-	arma_inline eT  operator[] (const uword i) const;
-
-	arma_inline eT& operator() (const uword i);
-	arma_inline eT  operator() (const uword i) const;
-
-	inline void set_min_size(const uword min_n_elem);
-
-	inline void set_size(const uword new_n_elem);
-	inline void reset();
-
-
-	inline void fill(const eT val);
-
-	inline void zeros();
-	inline void zeros(const uword new_n_elem);
-
-	arma_inline       eT* memptr();
-	arma_inline const eT* memptr() const;
-
-	arma_hot inline void copy_row(const arma::Mat<eT>& A, const uword row);
-
-
-protected:
-
-	inline void init_cold(const uword new_n_elem);
-	inline void init_warm(const uword new_n_elem);
-};
-
-
+bool
+eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMap& AMap, Args const& args);
 
 }

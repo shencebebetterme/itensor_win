@@ -110,11 +110,17 @@ std::vector<double> mypeek(const ITensor& A) {
 }
 
 vector_no_init<Real>* peek(const ITensor& A) {
+	if (!isReal(A)) {
+		Error("Tensor not real!");
+	}
 	vector_no_init<Real>* sP = &((*((ITWrap<Dense<double>>*) & (*A.store()))).d.store);
 	return sP;
 }
 
 vector_no_init<Cplx>* peek_cx(const ITensor& A) {
+	if (!isComplex(A)) {
+		Error("Tensor not complex!");
+	}
 	vector_no_init<Cplx>* sP = &((*((ITWrap<Dense<Cplx>>*) & (*A.store()))).d.store);
 	return sP;
 }
