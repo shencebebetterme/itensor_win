@@ -44,7 +44,7 @@ void testCFT(ITensor A) {
 #include "util/arpack_wrap.h"
 
 int main() {
-	auto i = Index(3, "i");
+	auto i = Index(10, "i");
 	//auto j = Index(20, "j");
 	//auto k = Index(2, "k");
 	//auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));

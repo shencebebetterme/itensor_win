@@ -202,7 +202,9 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	int maxrestart_ = args.getInt("MaxRestart", 0);
 	double tol = args.getReal("ErrGoal", 1E-4);
 	bool sym = args.getBool("RealSymmetric", false);
-	char* which = const_cast<char*>(args.getString("WhichEig", "LM").c_str());
+	std::string whicheig = args.getString("WhichEig", "LM");
+
+	char* which = const_cast<char*>(whicheig.c_str());
 
 	
 
@@ -239,13 +241,33 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	double* rwork = NULL; // Not used in the real case.
 
-	//todo: run_aupd
+
 	run_aupd<double>(nev, which, AMap, sym, n, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork,info);
 
 	if (info != 0) return false;//info=0 means normal exit of aupd
 
-	//todo: call neupd to obtain the actual eigenpairs
 
+	//todo: call neupd to obtain the actual eigenpairs
+	int rvec = 1;
+	char howmny = 'A';
+	char bmat = 'I'; // We are considering the standard eigenvalue problem.
+	const int ncv_ = ncv;
+
+	int* select = new int[ncv];
+	std::memset(select, 0, ncv * sizeof(int));
+
+	double* dr = new double[nev + 1];
+	double* di = new double[nev + 1];
+	std::memset(dr, 0, (nev + 1) * sizeof(double));
+	std::memset(di, 0, (nev + 1) * sizeof(double));
+
+	double* z = new double[n * (nev + 1)];
+	std::memset(z, 0, n * (nev + 1) * sizeof(double));
+
+	int ldz = n;
+	double* workev = new double[3 * nev];
+
+	neupd(&rvec, &howmny, select, dr, di, z, &ldz, (double*)NULL, (double*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
 	//todo: reorganize the eigenpairs into eigval and eigvecs
 
@@ -254,8 +276,15 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	delete[] resid;
 	delete[] workd;
 	delete[] workl;
+	delete[] select;
+	delete[] dr;
+	delete[] di;
+	delete[] z;
+	delete[] workev;
 
 	return false;
-}
+}//eig_arpack
+
+
 
 }//namespace it_wrap
