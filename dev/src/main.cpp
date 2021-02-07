@@ -52,10 +52,14 @@ T2 f(MyClass<T>& mc_) {
 }
 
 
+#include "sample/arpack_test.h"
+
 int main() {
 
-	MyClass mc(3.0);
-	auto a = f<double,double>(mc);
+	//MyClass mc(3.0);
+	//auto a = f<double,double>(mc);
+
+	arpack_test();
 
 }
 

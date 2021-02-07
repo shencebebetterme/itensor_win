@@ -73,6 +73,26 @@ naupd(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, double* 
 	 arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev, (T*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, info); 
 }
 
+// T can be double or complex
+template<typename T>
+inline
+void
+naupdT(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, T* resid, int* ncv, T* v, int* ldv, int* iparam, int* ipntr, T* workd, T* workl, int* lworkl, double* rwork, int* info)
+{
+	arma_type_check((is_supported_blas_type<T>::value == false));
+
+	if (is_double<T>::value) {
+		//typedef double    T;
+		arma_ignore(rwork);
+		arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, info);
+	}
+	else if (is_cx_double<T>::value) { 
+		//typedef Cplx T;
+		//typedef double xT; 
+		arma_fortran(arma_znaupd)(ido, bmat, n, which, nev, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork, info); }
+}
+
+
 inline
 void
 neupd(blas_int* rvec, char* howmny, blas_int* select, double* dr, double* di, double* z, blas_int* ldz, double* sigmar, double* sigmai, double* workev, char* bmat, blas_int* n, char* which, blas_int* nev, double* tol, double* resid, blas_int* ncv, double* v, blas_int* ldv, blas_int* iparam, blas_int* ipntr, double* workd, double* workl, blas_int* lworkl, double* rwork, blas_int* info)
@@ -85,6 +105,28 @@ neupd(blas_int* rvec, char* howmny, blas_int* select, double* dr, double* di, do
 }
 
 
+// for complex versions, pass d for dr, and null for di;
+// pass sigma for sigmar, and null for sigmai
+// rwork isn't used for non-complex versions
+template<typename T>
+inline
+void
+neupdT(blas_int* rvec, char* howmny, blas_int* select, T* dr, T* di, T* z, blas_int* ldz, T* sigmar, T* sigmai, T* workev, char* bmat, blas_int* n, char* which, blas_int* nev, double* tol, T* resid, blas_int* ncv, T* v, blas_int* ldv, blas_int* iparam, blas_int* ipntr, T* workd, T* workl, blas_int* lworkl, double* rwork, blas_int* info)
+{
+	arma_type_check((is_supported_blas_type<double>::value == false));
+
+	if (is_double<T>::value) {
+		//typedef double    T;
+		arma_ignore(rwork);
+		arma_fortran(arma_dneupd)(rvec, howmny, select, (T*)dr, (T*)di, (T*)z, ldz, (T*)sigmar, (T*)sigmai, (T*)workev, bmat, n, which, nev, (T*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, info);
+	}
+
+	else if (is_cx_double<T>::value) {
+		//typedef cx_double T;
+		//typedef double xT;
+		arma_fortran(arma_zneupd)(rvec, howmny, select, (T*)dr, (T*)z, ldz, (T*)sigmar, (T*)workev, bmat, n, which, nev, tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, rwork, info);
+	}
+}
 
 
 
@@ -133,7 +175,7 @@ run_aupd
 		//if (sym)
 		//	saupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
 		//else
-			naupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+			naupdT<double>(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
 		// What do we do now?
 		switch (ido)
@@ -200,6 +242,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 {
 	int nev_copy = args.getInt("nev", 1);//number of wanted eigenpairs
 	int nev = nev_copy;
+	//todo: also pass ncv as a parameter
 	int maxiter_ = args.getInt("MaxIter", 300);
 	int maxrestart_ = args.getInt("MaxRestart", 0);
 	double tol = args.getReal("ErrGoal", 1E-10);
@@ -241,8 +284,8 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	int ipntr[14] = { 0 };
 
-	//rwork is only used in cnaupd and znaupd
-	double* rwork = NULL; // Not used in the real case.
+	//rwork is only used in complex case e.g. cnaupd and znaupd
+	double* rwork = new double[ncv]; // Not used in the real case.
 
 
 	run_aupd<double>(nev, which, AMap, sym, n, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork,info);
@@ -267,6 +310,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	std::memset(dr, 0, (nev + 1) * sizeof(double));
 	std::memset(di, 0, (nev + 1) * sizeof(double));
 
+	//store the final eigenvectors
 	double* z = new double[n * (nev + 1)];
 	std::memset(z, 0, n * (nev + 1) * sizeof(double));
 
@@ -274,7 +318,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	double* workev = new double[3 * ncv];
 
 
-	neupd(&rvec, &howmny, select, dr, di, z, &ldz, (double*)NULL, (double*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+	neupdT<double>(&rvec, &howmny, select, dr, di, z, &ldz, (double*)NULL, (double*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
 	//todo: give warning about other cases
 	if (info != 0)
@@ -361,6 +405,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	delete[] workd;
 	delete[] workl;
 	delete[] select;
+	delete[] rwork;
 	delete[] dr;
 	delete[] di;
 	delete[] z;
