@@ -1886,6 +1886,9 @@
     <ClInclude Include="src\util\arpack_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\sample\arpack_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arma\armadillo" />

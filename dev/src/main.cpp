@@ -19,22 +19,6 @@ using namespace std::chrono;
 //ITensor trg(ITensor, int, int);
 
 
-void testCFT(ITensor A) {
-	printf("\n testing CFT \n");
-	Print(A);
-	ITensor As = glue(A, 2);
-	Print(As);
-	arma::mat Asmat = extract_mat(As);
-	//Asmat.print("A");
-	printf("\n");
-	cd_dense(Asmat, 5, 2, 1);
-}
-
-
-
-
-
-
 
 
 
@@ -43,64 +27,35 @@ void testCFT(ITensor A) {
 //#include "util/arnoldi.h"
 #include "util/arpack_wrap.h"
 
+
+
+template<typename T>
+class MyClass
+{
+public:
+	T x_;
+	MyClass(T x) {
+		x_ = x;
+	}
+
+
+private:
+
+};
+
+
+template<typename T, typename T2>
+T2 f(MyClass<T>& mc_) {
+	mc_.x_ = 0;
+	T2 z = mc_.x_;
+	return z;
+}
+
+
 int main() {
-	auto i = Index(100, "i");
-	//auto j = Index(5, "j");
-	//auto k = Index(2, "k");
-	//auto A = randomITensor(i, j, k, prime(i), prime(j), prime(k));
-	//auto A = randomITensor(i, prime(i));
-	
-	// 
-	//auto At = swapTags(A, "0", "1");
-	//A += At;
-	//A /= norm(A);
-	//auto A = randomITensor(i, prime(i));
-	ITensor A(i, prime(i));
-	for (auto a : range1(i.dim()))
-		for (auto b : range1(i.dim()))
-		{
-			double val = std::sin(0.5 * a + (0.3 * a) / b);
-			A.set(a, b, val);
-		}
-	//A.randomize();
-	//A.set(1, 2, 1,1,1,1, 0.1);
-	A /= norm(A);
 
-	int nev = 5;
+	MyClass mc(3.0);
+	auto a = f<double,double>(mc);
 
-	auto AM = ITensorMap(A);
-	std::vector<Cplx> eigval = {};
-	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack(eigval, eigvecs, AM, {"nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true});
-	//auto [U, D] = eigen(A);
-	//PrintData(D);
-	for (int i = 0; i < nev; i++) {
-		std::cout << norm(noPrime(A * eigvecs[i]) - eigval[i] * eigvecs[i]) << std::endl;
-	}
-	
-	int a = 1;
-
-	/*
-	auto AM = ITensorMap(A);
-
-	//auto x1 = randomITensor(i, j, k);
-	auto x1 = randomITensor(i);
-	//x1.set(1, 0.98);
-	//x1.set(2, 0.45);
-	//auto x2 = randomITensor(i);
-
-	constexpr int nvec = 6;
-	std::vector<ITensor> xvec(nvec, x1);
-
-	//xvec = { x1,x2 };
-
-	auto lambda = my_arnoldi(AM, xvec, { "ErrGoal=",1E-10,"MaxIter=",60,"MaxRestart=",5,"Npass=",2 });
-
-	for (auto i : range(nvec)) {
-		std::cout << lambda[i] << "\n";
-		PrintData(norm((A * xvec[i]).noPrime() - lambda[i] * xvec[i]));
-		std::cout << std::endl;
-	}
-	*/
 }
 
