@@ -198,7 +198,8 @@ run_aupd
 bool
 eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMap& AMap, Args const& args)
 {
-	int nev = args.getInt("nev", 1);//number of wanted eigenpairs
+	int nev_copy = args.getInt("nev", 1);//number of wanted eigenpairs
+	int nev = nev_copy;
 	int maxiter_ = args.getInt("MaxIter", 300);
 	int maxrestart_ = args.getInt("MaxRestart", 0);
 	double tol = args.getReal("ErrGoal", 1E-10);
@@ -210,7 +211,6 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	
 
-	//todo: calculate the needed space and allocate memory before calling run_aupd
 	
 	int n = AMap.size();
 
@@ -241,6 +241,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	int ipntr[14] = { 0 };
 
+	//rwork is only used in cnaupd and znaupd
 	double* rwork = NULL; // Not used in the real case.
 
 
@@ -289,7 +290,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	eigval.reserve(nev);
 	eigvecs.reserve(nev);
 
-	for (int i = 0; i < nev; ++i) {
+	for (int i = 0; i < nev_copy; ++i) {
 		eigval.emplace_back(*(dr + i), *(di + i));
 	}
 
@@ -298,7 +299,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	if (re_eigvec)
 	{
 		// reorganize the eigenvectors
-		for (int i = 0; i < nev; ++i) {
+		for (int i = 0; i < nev_copy; ++i) {
 
 			vector_no_init<Cplx> veci(n, 0); // store the extracted elements of veci
 			vector_no_init<Cplx> veci1(n, 0); // vec i+1
@@ -311,7 +312,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			vector_no_init<Cplx>& dAi1 = (*((ITWrap<Dense<Cplx>>*) & (*Ai1.store()))).d.store;
 
 			// i and i+1 is a pair
-			if ((i < nev - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
+			if ((i < nev_copy - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
 				for (int j = 0; j < n; ++j)
 				{
 					veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
@@ -328,7 +329,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			}
 
 			// if conjugate eigval don't match
-			else if ((i == nev - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
+			else if ((i == nev_copy - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
 				for (int j = 0; j < n; ++j)
 				{
 					veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
