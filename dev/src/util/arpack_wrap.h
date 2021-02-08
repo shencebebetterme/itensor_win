@@ -186,7 +186,7 @@ naupdT(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, T* resi
 
 inline
 void
-dsaupd(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, double* resid, int* ncv, double* v, int* ldv, int* iparam, int* ipntr, double* workd, double* workl, int* lworkl, double* rwork, int* info) {
+dsaupd(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, double* resid, int* ncv, double* v, int* ldv, int* iparam, int* ipntr, double* workd, double* workl, int* lworkl, int* info) {
 	arma_fortran(arma_dsaupd)(ido, bmat, n, which, nev, (double*)tol, (double*)resid, ncv, (double*)v, ldv, iparam, ipntr, (double*)workd, (double*)workl, lworkl, info);
 }
 
@@ -230,7 +230,7 @@ neupdT(blas_int* rvec, char* howmny, blas_int* select, T* dr, T* di, T* z, blas_
 
 inline
 void
-seupd(blas_int* rvec, char* howmny, blas_int* select, double* d, double* z, blas_int* ldz, double* sigma, char* bmat, blas_int* n, char* which, blas_int* nev, double* tol, double* resid, blas_int* ncv, double* v, blas_int* ldv, blas_int* iparam, blas_int* ipntr, double* workd, double* workl, blas_int* lworkl, blas_int* info) {
+dseupd(blas_int* rvec, char* howmny, blas_int* select, double* d, double* z, blas_int* ldz, double* sigma, char* bmat, blas_int* n, char* which, blas_int* nev, double* tol, double* resid, blas_int* ncv, double* v, blas_int* ldv, blas_int* iparam, blas_int* ipntr, double* workd, double* workl, blas_int* lworkl, blas_int* info) {
 	arma_fortran(arma_dseupd)(rvec, howmny, select, (double*)d, (double*)z, ldz, (double*)sigma, bmat, n, which, nev, (double*)tol, (double*)resid, ncv, (double*)v, ldv, iparam, ipntr, (double*)workd, (double*)workl, lworkl, info);
 }
 
@@ -278,10 +278,12 @@ run_aupd
 	while (ido != 99)
 	{
 		// Call saupd() or naupd() with the current parameters.
-		//if (sym)
-		//	saupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
-		//else
-		naupdT<T>(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+		if (sym) {
+			dsaupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
+		}
+		else {
+			naupdT<T>(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+		}
 
 		// What do we do now?
 		switch (ido)
@@ -352,7 +354,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	//todo: also pass ncv as a parameter
 	int maxiter_ = args.getInt("MaxIter", 300);
 	//int maxrestart_ = args.getInt("MaxRestart", 0);
-	double tol = args.getReal("err", 1E-10);
+	double tol = args.getReal("tol", 1E-10);
 	bool sym = args.getBool("sym", false);
 	bool re_eigvec = args.getBool("ReEigvec", false);
 	std::string whicheig = args.getString("WhichEig", "LM");
@@ -417,15 +419,19 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	std::memset(dr, 0, (nev + 1) * sizeof(T));
 	std::memset(di, 0, (nev + 1) * sizeof(T));
 
-	//store the final eigenvectors
-	T* z = new T[n * (nev + 1)];
+	T* z = new T[n * (nev + 1)];//store the final eigenvectors
 	std::memset(z, 0, n * (nev + 1) * sizeof(T));
 
 	int ldz = n;
 	T* workev = new T[3 * ncv];
 
 
-	neupdT<T>(&rvec, &howmny, select, dr, di, z, &ldz, (T*)NULL, (T*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+	if (sym) {
+		dseupd(&rvec, &howmny, select, dr, z, &ldz, (double*)NULL, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
+	}
+	else {
+		neupdT<T>(&rvec, &howmny, select, dr, di, z, &ldz, (T*)NULL, (T*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+	}
 
 	//todo: give warning about other cases
 	if (info != 0)

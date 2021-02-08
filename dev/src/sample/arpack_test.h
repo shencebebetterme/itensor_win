@@ -53,16 +53,16 @@ void arpack_test() {
 		}
 
 	std::cout << "norm of A is " << norm(A) << std::endl;
-	A += swapTags(A, "0", "1");
+	A += swapTags(A, "0", "1"); bool isSym = true;
 	A /= norm(A);
 
-	int nev = 2;
+	int nev = 3;
 
 	
 	auto AM = ITensorMap(A);
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack<Type>(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
+	itwrap::eig_arpack<Type>(eigval, eigvecs, AM, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"sym=",isSym });
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 	for (int i = 0; i < nev; i++) {
