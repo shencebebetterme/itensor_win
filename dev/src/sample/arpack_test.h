@@ -56,7 +56,7 @@ void arpack_test() {
 	auto AM = ITensorMap(A);
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
+	itwrap::eig_arpack<double>(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 	for (int i = 0; i < nev; i++) {
