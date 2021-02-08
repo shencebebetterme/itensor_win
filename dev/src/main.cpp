@@ -26,6 +26,7 @@ using namespace std::chrono;
 //#include "itensor/all.h"
 //#include "util/arnoldi.h"
 #include "util/arpack_wrap.h"
+#include "sample/arpack_test.h"
 
 
 
@@ -52,14 +53,18 @@ T2 f(MyClass<T>& mc_) {
 }
 
 
-#include "sample/arpack_test.h"
+
+
 
 int main() {
 
-	//MyClass mc(3.0);
-	//auto a = f<double,double>(mc);
+	std::vector<int> v1 = { 3,8,7,9 };
+	std::vector<std::string> v2 = { "h","e","l","o" };
+
+	ssort(v1, v2);
 
 	arpack_test();
+
 
 }
 

@@ -362,6 +362,11 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	char* which = const_cast<char*>(whicheig.c_str());
 
 
+	if (sym) {
+		if (is_cx_double<T>::value) {
+			Error("Cannot set sym = true for complex operator.");
+		}
+	}
 
 
 	int n = AMap.size();
@@ -405,7 +410,6 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	}
 
 
-	//todo: call neupd to obtain the actual eigenpairs
 	int rvec = 1; // return vec = true
 	char howmny = 'A';
 	char bmat = 'I'; // We are considering the standard eigenvalue problem.
@@ -535,6 +539,11 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			eigvecs.push_back(Ai);
 		}
 	}
+
+
+	//result of dseupd is not sorted
+	if (sym && whicheig == "LM") ssort(eigval, eigvecs);
+
 
 	//clear memory
 	delete[] v;

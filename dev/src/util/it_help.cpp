@@ -124,3 +124,12 @@ vector_no_init<Cplx>* peek_cx(const ITensor& A) {
 	vector_no_init<Cplx>* sP = &((*((ITWrap<Dense<Cplx>>*) & (*A.store()))).d.store);
 	return sP;
 }
+
+
+
+
+
+
+
+
+
