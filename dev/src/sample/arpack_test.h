@@ -40,6 +40,9 @@ void testCFT(ITensor A) {
 void arpack_test() {
 	auto i = Index(20, "i");
 
+	using Type = Cplx;
+	//using Type = double;
+
 	ITensor A(i, prime(i));
 	A.set(1, 1, Cplx(0, 1.0));
 	for (auto a : range1(i.dim()))
@@ -49,15 +52,16 @@ void arpack_test() {
 			A.set(a, b, val);
 		}
 
+	std::cout << "norm of A is " << norm(A) << std::endl;
 	A /= norm(A);
 
-	int nev = 3;
+	int nev = 2;
 
-	using T = double;
+	
 	auto AM = ITensorMap(A);
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack<std::complex<double>>(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
+	itwrap::eig_arpack<Type>(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 	for (int i = 0; i < nev; i++) {

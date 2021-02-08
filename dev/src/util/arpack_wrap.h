@@ -171,14 +171,14 @@ naupdT(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, T* resi
 	arma_type_check((is_supported_blas_type<T>::value == false));
 
 	if (is_double<T>::value) {
-		//typedef double    T;
+		typedef double    Td;
 		arma_ignore(rwork);
-		arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, info);
+		arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev, tol, (Td*)resid, ncv, (Td*)v, ldv, iparam, ipntr, (Td*)workd, (Td*)workl, lworkl, info);
 	}
 	else if (is_cx_double<T>::value) {
-		//typedef Cplx T;
+		typedef Cplx Tc;
 		//typedef double xT; 
-		arma_fortran(arma_znaupd)(ido, bmat, n, which, nev, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork, info);
+		arma_fortran(arma_znaupd)(ido, bmat, n, which, nev, tol, (Tc*)resid, ncv, (Tc*)v, ldv, iparam, ipntr, (Tc*)workd, (Tc*)workl, lworkl, rwork, info);
 	}
 }
 
@@ -206,15 +206,15 @@ neupdT(blas_int* rvec, char* howmny, blas_int* select, T* dr, T* di, T* z, blas_
 	arma_type_check((is_supported_blas_type<double>::value == false));
 
 	if (is_double<T>::value) {
-		//typedef double    T;
+		typedef double    Td;
 		arma_ignore(rwork);
-		arma_fortran(arma_dneupd)(rvec, howmny, select, (T*)dr, (T*)di, (T*)z, ldz, (T*)sigmar, (T*)sigmai, (T*)workev, bmat, n, which, nev, (T*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, info);
+		arma_fortran(arma_dneupd)(rvec, howmny, select, (Td*)dr, (Td*)di, (Td*)z, ldz, (Td*)sigmar, (Td*)sigmai, (Td*)workev, bmat, n, which, nev, (Td*)tol, (Td*)resid, ncv, (Td*)v, ldv, iparam, ipntr, (Td*)workd, (Td*)workl, lworkl, info);
 	}
 
 	else if (is_cx_double<T>::value) {
-		//typedef cx_double T;
+		typedef cx_double Tc;
 		//typedef double xT;
-		arma_fortran(arma_zneupd)(rvec, howmny, select, (T*)dr, (T*)z, ldz, (T*)sigmar, (T*)workev, bmat, n, which, nev, tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, rwork, info);
+		arma_fortran(arma_zneupd)(rvec, howmny, select, (Tc*)dr, (Tc*)z, ldz, (Tc*)sigmar, (Tc*)workev, bmat, n, which, nev, tol, (Tc*)resid, ncv, (Tc*)v, ldv, iparam, ipntr, (Tc*)workd, (Tc*)workl, lworkl, rwork, info);
 	}
 }
 
@@ -265,7 +265,7 @@ run_aupd
 		//if (sym)
 		//	saupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
 		//else
-		naupdT<double>(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
+		naupdT<T>(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
 		// What do we do now?
 		switch (ido)
@@ -335,9 +335,9 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	int nev = nev_copy;
 	//todo: also pass ncv as a parameter
 	int maxiter_ = args.getInt("MaxIter", 300);
-	int maxrestart_ = args.getInt("MaxRestart", 0);
-	double tol = args.getReal("ErrGoal", 1E-10);
-	bool sym = args.getBool("RealSymmetric", false);
+	//int maxrestart_ = args.getInt("MaxRestart", 0);
+	double tol = args.getReal("err", 1E-10);
+	bool sym = args.getBool("sym", false);
 	bool re_eigvec = args.getBool("ReEigvec", false);
 	std::string whicheig = args.getString("WhichEig", "LM");
 
@@ -388,7 +388,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 
 	//todo: call neupd to obtain the actual eigenpairs
-	int rvec = 1;
+	int rvec = 1; // return vec = true
 	char howmny = 'A';
 	char bmat = 'I'; // We are considering the standard eigenvalue problem.
 	const int ncv_ = ncv;
@@ -396,17 +396,17 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	int* select = new int[ncv];
 	std::memset(select, 0, ncv * sizeof(int));
 
-	double* dr = new double[nev + 1];
-	double* di = new double[nev + 1];
-	std::memset(dr, 0, (nev + 1) * sizeof(double));
-	std::memset(di, 0, (nev + 1) * sizeof(double));
+	T* dr = new T[nev + 1];
+	T* di = new T[nev + 1];
+	std::memset(dr, 0, (nev + 1) * sizeof(T));
+	std::memset(di, 0, (nev + 1) * sizeof(T));
 
 	//store the final eigenvectors
-	double* z = new double[n * (nev + 1)];
-	std::memset(z, 0, n * (nev + 1) * sizeof(double));
+	T* z = new T[n * (nev + 1)];
+	std::memset(z, 0, n * (nev + 1) * sizeof(T));
 
 	int ldz = n;
-	double* workev = new double[3 * ncv];
+	T* workev = new T[3 * ncv];
 
 
 	neupdT<T>(&rvec, &howmny, select, dr, di, z, &ldz, (T*)NULL, (T*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
@@ -425,14 +425,26 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	eigval.reserve(nev);
 	eigvecs.reserve(nev);
 
-	for (int i = 0; i < nev_copy; ++i) {
-		eigval.emplace_back(*(dr + i), *(di + i));
+	if (is_double<T>::value) {
+		double* dr_ = (double*)dr;
+		double* di_ = (double*)di;
+		for (int i = 0; i < nev_copy; ++i) {
+			eigval.emplace_back(dr_[i], di_[i]);
+		}
 	}
+	else if (is_cx_double<T>::value) {
+		for (int i = 0; i < nev_copy; ++i) {
+			//Cplx* dr_ = (Cplx*)dr;
+			eigval.push_back(dr[i]);
+		}
+	}
+	
 
 	IndexSet act_is = AMap.active_inds();
 
-	if (re_eigvec)
+	if (re_eigvec && is_double<T>::value)
 	{
+		double* z_ = (double*)(z);
 		// reorganize the eigenvectors
 		for (int i = 0; i < nev_copy; ++i) {
 
@@ -450,8 +462,8 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			if ((i < nev_copy - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
 				for (int j = 0; j < n; ++j)
 				{
-					veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
-					veci1[j] = Cplx(z[n * i + j], -z[n * (i + 1) + j]);
+					veci[j] = Cplx(z_[n * i + j], z_[n * (i + 1) + j]);
+					veci1[j] = Cplx(z_[n * i + j], -z_[n * (i + 1) + j]);
 				}
 
 				dAi.assign(veci.begin(), veci.end());
@@ -467,7 +479,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			else if ((i == nev_copy - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
 				for (int j = 0; j < n; ++j)
 				{
-					veci[j] = Cplx(z[n * i + j], z[n * (i + 1) + j]);
+					veci[j] = Cplx(z_[n * i + j], z_[n * (i + 1) + j]);
 				}
 
 				dAi.assign(veci.begin(), veci.end());
@@ -479,7 +491,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			else {
 				for (int j = 0; j < n; ++j)
 				{
-					veci[j] = Cplx(z[n * i + j], 0);
+					veci[j] = Cplx(z_[n * i + j], 0);
 				}
 
 				dAi.assign(veci.begin(), veci.end());
@@ -488,6 +500,18 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			}
 		}
 
+	}
+
+	// in complex case, eigenvectors have a direct layout
+	if (re_eigvec && is_cx_double<T>::value) {
+		for (int i = 0; i < nev_copy; ++i) {
+			ITensor Ai(act_is);
+			Ai.set(*iterInds(act_is), Cplx(1.0, 1.0));
+			vector_no_init<Cplx>& dAi = (*((ITWrap<Dense<Cplx>>*) & (*Ai.store()))).d.store;
+
+			dAi.assign(z + n * i, z + n * (i + 1));
+			eigvecs.push_back(Ai);
+		}
 	}
 
 	//clear memory
