@@ -41,6 +41,7 @@ void arpack_test() {
 	auto i = Index(20, "i");
 
 	ITensor A(i, prime(i));
+	A.set(1, 1, Cplx(0, 1.0));
 	for (auto a : range1(i.dim()))
 		for (auto b : range1(i.dim()))
 		{
@@ -56,7 +57,7 @@ void arpack_test() {
 	auto AM = ITensorMap(A);
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack<double>(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
+	itwrap::eig_arpack<std::complex<double>>(eigval, eigvecs, AM, { "nev=",nev,"ErrGoal=",1E-8, "ReEigvec=",true });
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 	for (int i = 0; i < nev; i++) {

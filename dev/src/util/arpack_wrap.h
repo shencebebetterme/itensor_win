@@ -406,7 +406,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	std::memset(z, 0, n * (nev + 1) * sizeof(double));
 
 	int ldz = n;
-	T* workev = new T[3 * ncv];
+	double* workev = new double[3 * ncv];
 
 
 	neupdT<T>(&rvec, &howmny, select, dr, di, z, &ldz, (T*)NULL, (T*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);

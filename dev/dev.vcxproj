@@ -859,6 +859,7 @@
     <ClInclude Include="src\TRG\tnr.h" />
     <ClInclude Include="src\TRG\trg.h" />
     <ClInclude Include="src\util\arpack_wrap.h" />
+    <ClInclude Include="src\util\arpack_wrap2.h" />
     <ClInclude Include="src\util\cft_data.h" />
     <ClInclude Include="src\util\database.h" />
     <ClInclude Include="src\util\extract_mat.h" />
