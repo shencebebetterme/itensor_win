@@ -162,6 +162,7 @@ naupd(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, double* 
 	arma_fortran(arma_dnaupd)(ido, bmat, n, which, nev, (T*)tol, (T*)resid, ncv, (T*)v, ldv, iparam, ipntr, (T*)workd, (T*)workl, lworkl, info);
 }
 
+
 // T can be double or complex
 template<typename T>
 inline
@@ -181,6 +182,14 @@ naupdT(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, T* resi
 		arma_fortran(arma_znaupd)(ido, bmat, n, which, nev, tol, (Tc*)resid, ncv, (Tc*)v, ldv, iparam, ipntr, (Tc*)workd, (Tc*)workl, lworkl, rwork, info);
 	}
 }
+
+
+inline
+void
+dsaupd(int* ido, char* bmat, int* n, char* which, int* nev, double* tol, double* resid, int* ncv, double* v, int* ldv, int* iparam, int* ipntr, double* workd, double* workl, int* lworkl, double* rwork, int* info) {
+	arma_fortran(arma_dsaupd)(ido, bmat, n, which, nev, (double*)tol, (double*)resid, ncv, (double*)v, ldv, iparam, ipntr, (double*)workd, (double*)workl, lworkl, info);
+}
+
 
 
 inline
@@ -216,6 +225,13 @@ neupdT(blas_int* rvec, char* howmny, blas_int* select, T* dr, T* di, T* z, blas_
 		//typedef double xT;
 		arma_fortran(arma_zneupd)(rvec, howmny, select, (Tc*)dr, (Tc*)z, ldz, (Tc*)sigmar, (Tc*)workev, bmat, n, which, nev, tol, (Tc*)resid, ncv, (Tc*)v, ldv, iparam, ipntr, (Tc*)workd, (Tc*)workl, lworkl, rwork, info);
 	}
+}
+
+
+inline
+void
+seupd(blas_int* rvec, char* howmny, blas_int* select, double* d, double* z, blas_int* ldz, double* sigma, char* bmat, blas_int* n, char* which, blas_int* nev, double* tol, double* resid, blas_int* ncv, double* v, blas_int* ldv, blas_int* iparam, blas_int* ipntr, double* workd, double* workl, blas_int* lworkl, blas_int* info) {
+	arma_fortran(arma_dseupd)(rvec, howmny, select, (double*)d, (double*)z, ldz, (double*)sigma, bmat, n, which, nev, (double*)tol, (double*)resid, ncv, (double*)v, ldv, iparam, ipntr, (double*)workd, (double*)workl, lworkl, info);
 }
 
 

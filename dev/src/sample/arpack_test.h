@@ -40,11 +40,11 @@ void testCFT(ITensor A) {
 void arpack_test() {
 	auto i = Index(20, "i");
 
-	using Type = Cplx;
-	//using Type = double;
+	//using Type = Cplx;
+	using Type = double;
 
 	ITensor A(i, prime(i));
-	A.set(1, 1, Cplx(0, 1.0));
+	//A.set(1, 1, Cplx(0, 1.0));
 	for (auto a : range1(i.dim()))
 		for (auto b : range1(i.dim()))
 		{
@@ -53,6 +53,7 @@ void arpack_test() {
 		}
 
 	std::cout << "norm of A is " << norm(A) << std::endl;
+	A += swapTags(A, "0", "1");
 	A /= norm(A);
 
 	int nev = 2;
