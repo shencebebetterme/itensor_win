@@ -8,7 +8,7 @@
 //template<typename T>
 class ITensorMap
 {
-	using T = double;
+	//using T = double;
 
 	ITensor const& A_;
 	mutable long size_;
@@ -42,8 +42,6 @@ public:
 
 		// initialize itx and ity
 		act_is = active_inds();
-		
-		
 	}
 
 	// the unprimed indices of A are those of vector x
@@ -56,6 +54,7 @@ public:
 	// act on the arpack memory
 	// if vec := *bin to *(bin+n)
 	// then replace *bout to *(bout+n) by A*vec
+	template <typename T>
 	void Amul(T* pin, T* pout, int n) const {
 		ITensor itx(act_is);
 		ITensor ity(act_is);
@@ -267,7 +266,7 @@ run_aupd
 	{
 		// Call saupd() or naupd() with the current parameters.
 		if (sym) {
-			dsaupd(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
+			dsaupd(&ido, &bmat, &n, which, &nev, &tol, (double*)resid, &ncv, (double*)v, &ldv, iparam, ipntr, (double*)workd, (double*)workl, &lworkl, &info);
 		}
 		else {
 			naupdT<T>(&ido, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
@@ -302,7 +301,7 @@ run_aupd
 			vector_no_init<T>& dvecy = (*((ITWrap<Dense<T>>*) & (*it_y.store()))).d.store;
 			std::memcpy(workd + *(ipntr + 1) - 1, &dvecy[0], n * sizeof(T));
 #else
-			AMap.Amul(workd + *ipntr - 1, workd + *(ipntr + 1) - 1, n);
+			AMap.Amul<T>(workd + *ipntr - 1, workd + *(ipntr + 1) - 1, n);
 #endif
 
 			break;
@@ -345,6 +344,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	int nev = nev_copy;
 	//todo: also pass ncv as a parameter
 	int maxiter_ = args.getInt("MaxIter", 300);
+	int ncv = args.getInt("ncv", std::max(20, 2 * nev + 1));
 	//int maxrestart_ = args.getInt("MaxRestart", 0);
 	double tol = args.getReal("tol", 1E-10);
 	bool sym = args.getBool("sym", false);
@@ -367,8 +367,8 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 		Error("n_eigval + 1 > matrix size\n");
 	}
 
-	int ncv = nev + 2 + 1;
-
+	//int ncv = nev + 2 + 1;
+	if (ncv < nev + 2 + 1) { ncv = nev + 2 + 1; }
 	if (ncv < (2 * nev + 1)) { ncv = 2 * nev + 1; }
 	if (ncv > n) { ncv = n; }
 
@@ -423,7 +423,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 
 	if (sym) {
-		dseupd(&rvec, &howmny, select, dr, z, &ldz, (double*)NULL, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, &info);
+		dseupd(&rvec, &howmny, select, (double*)dr, (double*)z, &ldz, (double*)NULL, &bmat, &n, which, &nev, &tol, (double*)resid, &ncv, (double*)v, &ldv, iparam, ipntr, (double*)workd, (double*)workl, &lworkl, &info);
 	}
 	else {
 		neupdT<T>(&rvec, &howmny, select, dr, di, z, &ldz, (T*)NULL, (T*)NULL, workev, &bmat, &n, which, &nev, &tol, resid, &ncv, v, &ldv, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
