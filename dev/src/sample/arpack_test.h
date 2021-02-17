@@ -38,7 +38,22 @@ void testCFT(ITensor A) {
 #include "util/arpack_wrap.h"
 
 
+class MyITensorMap : public ITensorMapBase {
+public:
+	ITensor A_;
 
+	// pass the default constructor
+	MyITensorMap(IndexSet& is)
+		: ITensorMapBase(is)
+	{}
+
+	// implement the product interface
+	void product(ITensor const& x, ITensor& y) const
+	{
+		y = A_ * x;
+		y.noPrime();
+	}
+};
 
 
 
@@ -66,8 +81,15 @@ void arpack_test() {
 
 	int nev = 3;
 
-	
-	auto AM = ITensorMap(A);
+	//derived from the base class
+	//overload the product function
+	IndexSet Ais = findInds(A, "0");
+
+
+	auto AM = MyITensorMap(Ais);
+	AM.A_ = A;
+
+
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
 	itwrap::eig_arpack<Type>(eigval, eigvecs, AM, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"sym=",isSym });

@@ -6,11 +6,12 @@
 //todo: what if A_ is not an ITensor
 //T can be double or complex, determined by the element type of A
 //template<typename T>
-class ITensorMap
+class ITensorMapBase
 {
+public:
 	//using T = double;
 
-	ITensor const& A_;
+	//ITensor const& A_;
 	mutable long size_;
 	IndexSet act_is;
 
@@ -23,30 +24,29 @@ class ITensorMap
 
 public:
 
-	ITensorMap(ITensor const& A)
-		: A_(A)
-	{
-		size_ = 1;
-		int psize_ = 1;
-		for (auto& I : A_.inds())
-		{
-			if (I.primeLevel() == 0)
-				size_ *= dim(I);
-			if (I.primeLevel() == 1)
-				psize_ *= dim(I);
-		}
-		// make sure A is a square matrix
-		if (size_ != psize_) {
-			itensor::error("ITensorMap unprimed and primed dim don't match.\n");
-		}
+	//ITensorMap(ITensor const& A)
+	//	: A_(A)
+	//{
+	//	size_ = 1;
+	//	int psize_ = 1;
+	//	for (auto& I : A_.inds())
+	//	{
+	//		if (I.primeLevel() == 0)
+	//			size_ *= dim(I);
+	//		if (I.primeLevel() == 1)
+	//			psize_ *= dim(I);
+	//	}
+	//	// make sure A is a square matrix
+	//	if (size_ != psize_) {
+	//		itensor::error("ITensorMap unprimed and primed dim don't match.\n");
+	//	}
 
-		// initialize itx and ity
-		act_is = active_inds();
-	}
+	//	act_is = findInds(A, "0");
+	//}
 
 
-	ITensorMap(IndexSet const& is) 
-		:A_(ITensor())
+	ITensorMapBase(IndexSet& is) 
+		//:A_(ITensor())
 	{
 		size_ = 1;
 		for (auto& I : is) {
@@ -93,13 +93,13 @@ public:
 
 
 
-	//define max-vec product A x -> b
-	void
-		product(ITensor const& x, ITensor& b) const
-	{
-		b = A_ * x;
-		b.noPrime();
-	}
+	//define max-vec product A x -> y
+	virtual
+	void product(ITensor const& x, ITensor& y) const = 0;
+	/*{
+		y = A_ * x;
+		y.noPrime();
+	}*/
 
 };
 
@@ -255,7 +255,7 @@ inline
 void
 run_aupd
 (
-	int nev, char* which, const ITensorMap& AMap, const bool sym,
+	int nev, char* which, const ITensorMapBase& AMap, const bool sym,
 	int& n, double& tol,
 	T* resid, int& ncv, T* v, int& ldv,
 	int* iparam, int* ipntr,
@@ -351,7 +351,7 @@ run_aupd
 
 template<typename T>
 bool
-eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMap& AMap, Args const& args)
+eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMapBase& AMap, Args const& args)
 {
 	int nev = args.getInt("nev", 1);//number of wanted eigenpairs
 	//todo: also pass ncv as a parameter
