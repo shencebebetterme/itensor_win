@@ -108,3 +108,59 @@ void arpack_test() {
 
 }
 
+
+
+//periodic MPO
+class MyITensorMap2 : public ITensorMapBase {
+public:
+	ITensor A_;
+	int N_ = 1;
+
+	// pass the default constructor
+	MyITensorMap2(IndexSet& is)
+		: ITensorMapBase(is)
+	{}
+
+	// implement the product interface A x --> y
+	void product(ITensor const& x, ITensor& y) const
+	{
+		//y = A_ * x;
+		//replace all "u" tags to "d" tags
+		y = A_ * x;
+		for (int i = 1; i < N_; i++) {
+			ITensor Ai = prime(A_, i);
+			y *= delta(findIndex(y, "r"), findIndex(Ai, "l")) * Ai;
+		}
+		y *= delta(findIndex(y, "r"), findIndex(y, "l"));
+		y.replaceTags("u", "d");
+	}
+};
+
+
+void arpack_test2() {
+	const double beta_c = 0.5 * log(1 + sqrt(2));
+	ITensor A0 = database::ising2d(beta_c);
+	
+	Index d = findIndex(A0, "d");
+
+	int N = 20;
+	std::vector<Index> idv = {};
+	for (int i = 0; i < N; i++) {
+		Index di = prime(d, i);
+		idv.push_back(di);
+	}
+
+	IndexSet is(idv);
+
+	MyITensorMap2 Amap(is);
+	Amap.A_ = A0;
+	Amap.N_ = N;
+
+	int nev = 10;
+	std::vector<Cplx> eigval = {};
+	std::vector<ITensor> eigvecs = {};
+	itwrap::eig_arpack<double>(eigval, eigvecs, Amap, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true});
+
+	//show_cd(arma::cx_vec eigval, int num, int n, int m = 1);
+	show_cd(eigval, nev, N, 1);
+}

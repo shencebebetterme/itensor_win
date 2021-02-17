@@ -50,7 +50,7 @@ public:
 	{
 		size_ = 1;
 		for (auto& I : is) {
-			if (I.primeLevel() > 0) Error("Index not primed.");
+			//if (I.primeLevel() > 0) Error("Index not primed.");
 			size_ *= dim(I);
 		}
 		act_is = is;

@@ -63,7 +63,7 @@ int main() {
 
 	ssort(v1, v2);
 
-	arpack_test();
+	arpack_test2();
 
 
 }
