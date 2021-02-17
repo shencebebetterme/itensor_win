@@ -14,8 +14,8 @@ class ITensorMap
 	mutable long size_;
 	IndexSet act_is;
 
-	ITensor itx;
-	ITensor ity;
+	//ITensor itx;
+	//ITensor ity;
 
 	
 	//IndexSet is;
@@ -42,12 +42,7 @@ public:
 
 		// initialize itx and ity
 		act_is = active_inds();
-		itx = ITensor(act_is);
-		ity = ITensor(act_is);
-
-		Cplx val(1.0, 1.0);
-		itx.set(*iterInds(act_is), *(T*)&val);
-		ity.set(*iterInds(act_is), *(T*)&val);
+		
 		
 	}
 
@@ -61,8 +56,13 @@ public:
 	// act on the arpack memory
 	// if vec := *bin to *(bin+n)
 	// then replace *bout to *(bout+n) by A*vec
-	void Amul(T* pin, T* pout, int n) {
+	void Amul(T* pin, T* pout, int n) const {
+		ITensor itx(act_is);
+		ITensor ity(act_is);
 
+		Cplx val(1.0, 1.0);
+		itx.set(*iterInds(act_is), *(T*)&val);
+		ity.set(*iterInds(act_is), *(T*)&val);
 		//todo: avoid this memory copying by modifying the allocator of vector_no_init
 		// copy the memory to itensor itx, do contraction, then copy memory of ity back
 		vector_no_init<T>& dvecx = (*((ITWrap<Dense<T>>*) & (*itx.store()))).d.store;
@@ -262,18 +262,6 @@ run_aupd
 
 
 
-	IndexSet act_is = AMap.active_inds();
-	ITensor it_x(act_is);
-	// make the store has type = double or complex
-	Cplx val(1.0, 1.0);
-	it_x.set(*iterInds(act_is), *(T*)&val);
-
-	vector_no_init<T>& dvecx = (*((ITWrap<Dense<T>>*) & (*it_x.store()))).d.store;
-
-	ITensor it_y = it_x;
-
-
-
 	// All the parameters have been set or created.  Time to loop a lot.
 	while (ido != 99)
 	{
@@ -308,10 +296,14 @@ run_aupd
 
 			//todo: avoid this memory copying by modifying the allocator of vector_no_init
 			// copy the memory to itensor it_x, do contraction, then copy memory of y back
+#if 0
 			dvecx.assign(workd + *ipntr - 1, workd + *ipntr - 1 + n);
 			AMap.product(it_x, it_y);
 			vector_no_init<T>& dvecy = (*((ITWrap<Dense<T>>*) & (*it_y.store()))).d.store;
 			std::memcpy(workd + *(ipntr + 1) - 1, &dvecy[0], n * sizeof(T));
+#else
+			AMap.Amul(workd + *ipntr - 1, workd + *(ipntr + 1) - 1, n);
+#endif
 
 			break;
 		}

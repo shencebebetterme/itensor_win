@@ -52,8 +52,10 @@ void arpack_test() {
 			A.set(a, b, val);
 		}
 
+	bool isSym = false;
+
 	std::cout << "norm of A is " << norm(A) << std::endl;
-	A += swapTags(A, "0", "1"); bool isSym = true;
+	//A += swapTags(A, "0", "1"); isSym = true;
 	A /= norm(A);
 
 	int nev = 3;
