@@ -44,9 +44,29 @@ public:
 		act_is = active_inds();
 	}
 
+
+	ITensorMap(IndexSet const& is) 
+		:A_(ITensor())
+	{
+		size_ = 1;
+		for (auto& I : is) {
+			if (I.primeLevel() > 0) Error("Index not primed.");
+			size_ *= dim(I);
+		}
+		act_is = is;
+	}
+
+
 	// the unprimed indices of A are those of vector x
 	IndexSet active_inds() const{
-		return findInds(A_, "0");
+		//return findInds(A_, "0");
+		return act_is;
+	}
+
+	//dim of this matrix
+	long size() const
+	{
+		return size_;
 	}
 
 
@@ -79,13 +99,6 @@ public:
 	{
 		b = A_ * x;
 		b.noPrime();
-	}
-
-	//dim of this matrix
-	long
-		size() const
-	{
-		return size_;
 	}
 
 };
