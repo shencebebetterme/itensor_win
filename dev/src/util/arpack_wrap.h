@@ -340,8 +340,7 @@ template<typename T>
 bool
 eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITensorMap& AMap, Args const& args)
 {
-	int nev_copy = args.getInt("nev", 1);//number of wanted eigenpairs
-	int nev = nev_copy;
+	int nev = args.getInt("nev", 1);//number of wanted eigenpairs
 	//todo: also pass ncv as a parameter
 	int maxiter_ = args.getInt("MaxIter", 300);
 	int ncv = args.getInt("ncv", std::max(20, 2 * nev + 1));
@@ -393,8 +392,9 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	//rwork is only used in complex case e.g. cnaupd and znaupd
 	double* rwork = new double[ncv]; // Not used in the real case.
 
+	int nev_ = nev;
 
-	run_aupd<T>(nev, which, AMap, sym, n, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork, info);
+	run_aupd<T>(nev_, which, AMap, sym, n, tol, resid, ncv, v, ldv, iparam, ipntr, workd, workl, lworkl, rwork, info);
 
 	if (info != 0) {
 		if (info == 1) std::cout << "Maximum number of iterations taken in run_aupd." << std::endl;
@@ -421,7 +421,6 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	int ldz = n;
 	T* workev = new T[3 * ncv];
 
-
 	if (sym) {
 		dseupd(&rvec, &howmny, select, (double*)dr, (double*)z, &ldz, (double*)NULL, &bmat, &n, which, &nev, &tol, (double*)resid, &ncv, (double*)v, &ldv, iparam, ipntr, (double*)workd, (double*)workl, &lworkl, &info);
 	}
@@ -446,12 +445,12 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	if (is_double<T>::value) {
 		double* dr_ = (double*)dr;
 		double* di_ = (double*)di;
-		for (int i = 0; i < nev_copy; ++i) {
+		for (int i = 0; i < nev; ++i) {
 			eigval.emplace_back(dr_[i], di_[i]);
 		}
 	}
 	else if (is_cx_double<T>::value) {
-		for (int i = 0; i < nev_copy; ++i) {
+		for (int i = 0; i < nev; ++i) {
 			//Cplx* dr_ = (Cplx*)dr;
 			eigval.push_back(dr[i]);
 		}
@@ -464,7 +463,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 	{
 		double* z_ = (double*)(z);
 		// reorganize the eigenvectors
-		for (int i = 0; i < nev_copy; ++i) {
+		for (int i = 0; i < nev; ++i) {
 
 			vector_no_init<Cplx> veci(n, 0); // store the extracted elements of veci
 			vector_no_init<Cplx> veci1(n, 0); // vec i+1
@@ -477,7 +476,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			vector_no_init<Cplx>& dAi1 = (*((ITWrap<Dense<Cplx>>*) & (*Ai1.store()))).d.store;
 
 			// i and i+1 is a pair
-			if ((i < nev_copy - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
+			if ((i < nev - 1) && (eigval[i] == std::conj(eigval[i + 1]))) {
 				for (int j = 0; j < n; ++j)
 				{
 					veci[j] = Cplx(z_[n * i + j], z_[n * (i + 1) + j]);
@@ -494,7 +493,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 			}
 
 			// if conjugate eigval don't match
-			else if ((i == nev_copy - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
+			else if ((i == nev - 1) && (Cplx(eigval[i]).imag() != 0.0)) {
 				for (int j = 0; j < n; ++j)
 				{
 					veci[j] = Cplx(z_[n * i + j], z_[n * (i + 1) + j]);
@@ -522,7 +521,7 @@ eig_arpack(std::vector<Cplx>& eigval, std::vector<ITensor>& eigvecs, const ITens
 
 	// in complex case, eigenvectors have a direct layout
 	if (re_eigvec && is_cx_double<T>::value) {
-		for (int i = 0; i < nev_copy; ++i) {
+		for (int i = 0; i < nev; ++i) {
 			ITensor Ai(act_is);
 			Ai.set(*iterInds(act_is), Cplx(1.0, 1.0));
 			vector_no_init<Cplx>& dAi = (*((ITWrap<Dense<Cplx>>*) & (*Ai.store()))).d.store;
