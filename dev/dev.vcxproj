@@ -833,6 +833,7 @@
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_bones.hpp" />
     <ClInclude Include="arma\armadillo_bits\xvec_htrans_meat.hpp" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\sample\adjoint.h" />
     <ClInclude Include="src\sample\arpack_test.h" />
     <ClInclude Include="src\sample\dmrg_test.h" />
     <ClInclude Include="src\TRG\radial_trans.h" />
