@@ -143,7 +143,7 @@ void arpack_test2() {
 	
 	Index d = findIndex(A0, "d");
 
-	int N = 20;
+	int N = 10;
 	std::vector<Index> idv = {};
 	for (int i = 0; i < N; i++) {
 		Index di = prime(d, i);

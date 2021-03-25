@@ -26,7 +26,8 @@ using namespace std::chrono;
 //#include "itensor/all.h"
 //#include "util/arnoldi.h"
 #include "util/arpack_wrap.h"
-#include "sample/arpack_test.h"
+//#include "sample/arpack_test.h"
+#include "sample/adjoint.h"
 
 
 
@@ -63,8 +64,14 @@ int main() {
 
 	ssort(v1, v2);
 
-	arpack_test2();
+	//arpack_test2();
 
+	const double beta_c = 0.5 * log(1 + sqrt(2));
+	ITensor A0 = database::ising2d(beta_c);
 
+	ITensor B = replaceTags(A0, "d,u", "u,uu");
+
+	adtest1();
+	//arpack_test2();
 }
 
