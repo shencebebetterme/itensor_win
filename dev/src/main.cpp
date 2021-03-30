@@ -71,7 +71,8 @@ int main() {
 
 	ITensor B = replaceTags(A0, "d,u", "u,uu");
 
-	adtest1();
+	adtest2();
 	//arpack_test2();
+	//arpack_test();
 }
 

@@ -69,7 +69,7 @@ void arpack_test() {
 	for (auto a : range1(i.dim()))
 		for (auto b : range1(i.dim()))
 		{
-			double val = std::sin(0.5 * a + (0.3 * a) / b);
+			double val = std::sin(0.5 * a + (0.3 * a) / b) + 0.01*std::cos(a/b);
 			A.set(a, b, val);
 		}
 
@@ -79,7 +79,7 @@ void arpack_test() {
 	//A += swapTags(A, "0", "1"); isSym = true;
 	A /= norm(A);
 
-	int nev = 3;
+	int nev = 5;
 
 	//derived from the base class
 	//overload the product function
@@ -92,7 +92,7 @@ void arpack_test() {
 
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack<Type>(eigval, eigvecs, AM, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"sym=",isSym });
+	itwrap::eig_arpack<Type>(eigval, eigvecs, AM, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"sym=",isSym,"WhichEig=","SM" });
 	//auto [U, D] = eigen(A);
 	//PrintData(D);
 	for (int i = 0; i < nev; i++) {
