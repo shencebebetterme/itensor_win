@@ -41,9 +41,9 @@ public:
 		y.replaceTags("uu", "u"); // now y has indices u and d
 	}
 
+	// ad^2
 	void product(ITensor const& x, ITensor& y) const
 	{
-		// ad^2
 		ITensor tmp = x;
 		ad(x, tmp);
 		ad(tmp, y);
