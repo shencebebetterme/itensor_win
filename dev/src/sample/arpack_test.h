@@ -143,7 +143,7 @@ void arpack_test2() {
 	
 	Index d = findIndex(A0, "d");
 
-	int N = 10;
+	int N = 20;
 	std::vector<Index> idv = {};
 	for (int i = 0; i < N; i++) {
 		Index di = prime(d, i);
@@ -153,7 +153,10 @@ void arpack_test2() {
 	IndexSet is(idv);
 
 	MyITensorMap2 Amap(is);
-	Amap.A_ = A0;
+	const double c_ising = 0.5;//central charge
+	const double f_ising = 0.929695398340790;//free energy per site
+	const double fA = f_ising * 2; //free energy per A tensor
+	Amap.A_ = A0 / std::exp((2 * PI /std::pow(N,2)) * (c_ising / 12) + fA);
 	Amap.N_ = N;
 
 	int nev = 10;
