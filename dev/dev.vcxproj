@@ -835,6 +835,7 @@
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\sample\adjoint.h" />
     <ClInclude Include="src\sample\arpack_test.h" />
+    <ClInclude Include="src\sample\dmrg_ising.h" />
     <ClInclude Include="src\sample\dmrg_test.h" />
     <ClInclude Include="src\TRG\radial_trans.h" />
     <ClInclude Include="src\inc.h" />
