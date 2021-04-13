@@ -3,7 +3,7 @@
 #include "itensor/all.h"
 
 void dmrg_ising() {
-	int N = 32;
+	int N = 80;
 	//int N = std::atoi(argv[1]);
 	//auto sites = SpinHalf(N);
 	auto sites = SpinHalf(N, { "ConserveQNs=",false });
@@ -16,6 +16,9 @@ void dmrg_ising() {
 	{
 		ampo += -4.0, "Sz", j, "Sz", j + 1;
 	}
+
+	ampo += -4.0, "Sz", 1, "Sz", N;
+
 	for (int j = 1; j <= N; ++j) {
 		ampo += -2.0 * h, "Sx", j;
 	}
@@ -23,7 +26,7 @@ void dmrg_ising() {
 	auto H = toMPO(ampo);
 	//auto H = MPO(ampo);
 
-	auto sweeps = Sweeps(5);
+	auto sweeps = Sweeps(30);
 	sweeps.maxdim() = 10, 40, 100, 200, 200;
 	sweeps.cutoff() = 1E-8;
 
@@ -41,14 +44,15 @@ void dmrg_ising() {
 	auto [energy, psi] = dmrg(H, psi0, sweeps, { "Quiet",true });
 
 	printf("\n");
-	printfln("Ground state energy = %.20f", energy);
-	printfln("E/N = %.20f", energy / N);
+	printfln("Ground state energy = %.10f", energy);
+	printfln("E/N = %.10f", energy / N);
 	//compare with https://dmrg101-tutorial.readthedocs.io/en/latest/tfim.html
 }
 
 
+// with periodic b.c.
 void dmrg_ising_excited() {
-	int N = 100;
+	int N = 10;
 	//int N = std::atoi(argv[1]);
 	//auto sites = SpinHalf(N);
 	auto sites = SpinHalf(N, { "ConserveQNs=",false });

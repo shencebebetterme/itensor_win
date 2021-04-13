@@ -26,8 +26,8 @@ using namespace std::chrono;
 //#include "itensor/all.h"
 //#include "util/arnoldi.h"
 // 
-//#include "util/arpack_wrap.h"
-//#include "sample/arpack_test.h"
+#include "util/arpack_wrap.h"
+#include "sample/arpack_test.h"
 //#include "sample/adjoint.h"
 
 
@@ -56,11 +56,11 @@ T2 f(MyClass<T>& mc_) {
 
 
 
-#include "sample/dmrg_ising.h"
 
 int main(int argc, char** argv) {
 
-	dmrg_ising_excited();
+	//dmrg_ising();
+	//dmrg_ising_excited();
 
 	/*std::vector<int> v1 = { 3,8,7,9 };
 	std::vector<std::string> v2 = { "h","e","l","o" };
@@ -90,6 +90,61 @@ int main(int argc, char** argv) {
 	//arpack_test();
 
 
-	
+	//todo: L0 + L0bar from H of 1d ising loop
+	int N = 12;
+	//int N = std::atoi(argv[1]);
+	//auto sites = SpinHalf(N);
+	auto sites = SpinHalf(N, { "ConserveQNs=",false });
+
+	double h = 1.0; //at critical point
+
+	auto ampo = AutoMPO(sites);
+
+	for (int j = 1; j < N; ++j)
+	{
+		ampo += -4.0, "Sz", j, "Sz", j + 1;
+	}
+
+	ampo += -4.0, "Sz", 1, "Sz", N;
+
+	for (int j = 1; j <= N; ++j) {
+		ampo += -2.0 * h, "Sx", j;
+	}
+
+	auto H = toMPO(ampo);
+
+	ITensor HT = H.A(1);
+	for (int i = 2; i <= N; ++i) {
+		HT *= H.A(i);
+	}
+
+	HT *= N / (2 * PI);
+
+	//todo: remove the free energy part
+
+	HT *= 0.5; // now HT should have the same spectrum as L0 + L0bar with a shift
+
+	//todo: check spectrum of HT
+	IndexSet HTis = findInds(HT, "0"); 
+	auto HTM = MyITensorMap(HTis);
+	HTM.A_ = HT;
+
+	int nev = 5;
+	std::vector<Cplx> eigval = {};
+	std::vector<ITensor> eigvecs = {};
+	itwrap::eig_arpack<double>(eigval, eigvecs, HTM, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"WhichEig=","SR" });
+	//auto [U, D] = eigen(A);
+	//PrintData(D);
+	for (int i = 0; i < nev; i++) {
+		//std::cout << norm(noPrime(HT * eigvecs[i]) - eigval[i] * eigvecs[i]) << std::endl;
+	}
+
+	printfln("relative energy spectrum is");
+	for (int i = 0; i < nev; i++) {
+		std::cout << eigval[i]- eigval[0] << std::endl;
+		//PrintData(eigvecs[i]);
+	}
+
+	int a = 0;
 }
 
