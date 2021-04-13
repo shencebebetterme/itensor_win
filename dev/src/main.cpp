@@ -56,9 +56,11 @@ T2 f(MyClass<T>& mc_) {
 
 
 
-
+#include "sample/dmrg_ising.h"
 
 int main(int argc, char** argv) {
+
+	dmrg_ising_excited();
 
 	/*std::vector<int> v1 = { 3,8,7,9 };
 	std::vector<std::string> v2 = { "h","e","l","o" };
