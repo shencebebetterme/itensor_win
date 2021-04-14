@@ -282,7 +282,7 @@ int main(int argc, char** argv) {
 	admap.Z_ = H;
 	admap.nl_ = N;
 
-	int nev = 12;
+	int nev = 14;
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
 	itwrap::eig_arpack<double>(eigval, eigvecs, admap, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"WhichEig=","SR" });
