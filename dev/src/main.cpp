@@ -235,9 +235,26 @@ public:
 };
 
 
-int main(int argc, char** argv) {
+double gsE(IndexSet HTis, MPO H, int N) {
 	
-	int N = 7;
+	MPOMap mmap(HTis);
+	mmap.mpo = H;
+	mmap.N_ = N;
+
+	int nev = 2;
+	std::vector<Cplx> eigval = {};
+	std::vector<ITensor> eigvecs = {};
+	itwrap::eig_arpack<double>(eigval, eigvecs, mmap, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"WhichEig=","SR" });
+	double gse = eigval[0].real();
+
+	return gse;
+}
+
+
+
+void diag_ad() {
+	
+	int N = 4;
 	auto sites = SpinHalf(N, { "ConserveQNs=",false });
 
 	double h = 1.0; //at critical point
@@ -261,18 +278,8 @@ int main(int argc, char** argv) {
 	H *= N / (2 * PI);
 	H *= 0.5; // remove an extra factor of 2
 	//todo: shift H s.t. its lowest eigenvalue is 0
-	IndexSet HTis = sites.inds();
-
-	MPOMap mmap(HTis);
-	mmap.mpo = H;
-	mmap.N_ = N;
-
-	int nev = 2;
-	std::vector<Cplx> eigval = {};
-	std::vector<ITensor> eigvecs = {};
-	itwrap::eig_arpack<double>(eigval, eigvecs, mmap, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"WhichEig=","SR" });
-	double gse = eigval[0].real();
-
+	double gse = gsE(sites.inds(), H, N);
+	
 	//IndexSet HDis = sites.inds();
 	//IndexSet HUis = sites.inds().prime();
 	// IndexSet HTis = HDis + HUis
@@ -282,7 +289,7 @@ int main(int argc, char** argv) {
 	admap.Z_ = H;
 	admap.nl_ = N;
 
-	int nev = 14;
+	int nev = 10;
 	std::vector<Cplx> eigval = {};
 	std::vector<ITensor> eigvecs = {};
 	itwrap::eig_arpack<double>(eigval, eigvecs, admap, { "nev=",nev,"tol=",1E-8, "ReEigvec=",true,"WhichEig=","SR" });
@@ -294,4 +301,9 @@ int main(int argc, char** argv) {
 		std::cout << ei << std::endl;
 		//PrintData(eigvecs[i]);
 	}
+}
+
+
+int main() {
+	diag_ad();
 }

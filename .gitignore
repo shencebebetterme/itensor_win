@@ -37,6 +37,12 @@ bld/
 */x64-Debug/
 */X64-Release/
 
+*.xml
+*.xsd
+*.xslt
+*.graph
+*config.json*
+
 *.txt
 
 *.tlog
