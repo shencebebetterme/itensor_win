@@ -34,7 +34,9 @@ void cd_sparse(arma::sp_mat& TM_sparse, int num, int n, int m) {
         printf("\nToo many states requested!\n");
     }
 
-    cx_vec eigval = eigs_gen(TM_sparse, num, "lm", 0.0001);
+    arma::eigs_opts opt;
+    opt.tol = 0.001;
+    cx_vec eigval = eigs_gen(TM_sparse, num, "lm", opt);
 
     show_cd(eigval, num, n, m);
 }

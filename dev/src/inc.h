@@ -1,6 +1,7 @@
 #pragma once
 
-
+#define ARMA_BLAS_NO_UNDERSCORE
+#define ARMA_DONT_USE_FORTRAN_HIDDEN_ARGS
 #include <armadillo>
 
 #include "itensor/all_basic.h"
