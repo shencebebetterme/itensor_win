@@ -1139,6 +1139,7 @@ extern "C"
   
   // reciprocal of condition number (complex, band matrix)
   void arma_fortran(arma_cgbcon)(const char* norm, const blas_int* n, const blas_int* kl, const blas_int* ku, const blas_cxf* ab, const blas_int* ldab, const blas_int* ipiv, const  float* anorm,  float* rcond, blas_cxf* work,  float* rwork, blas_int* info) ARMA_NOEXCEPT;
+
   void arma_fortran(arma_zgbcon)(const char* norm, const blas_int* n, const blas_int* kl, const blas_int* ku, const blas_cxd* ab, const blas_int* ldab, const blas_int* ipiv, const double* anorm, double* rcond, blas_cxd* work, double* rwork, blas_int* info) ARMA_NOEXCEPT;
   
   // obtain parameters according to the local configuration of lapack

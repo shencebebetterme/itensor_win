@@ -56,19 +56,19 @@ using LAPACK_INT = lapack_int;
 using LAPACK_REAL = double;
 using LAPACK_COMPLEX = lapack_complex_double;
 
-inline LAPACK_REAL& 
-realRef(LAPACK_COMPLEX & z) 
-    { 
-    auto* p = reinterpret_cast<double*>(&z);
-    return p[0];
-    }
+inline LAPACK_REAL&
+realRef(LAPACK_COMPLEX& z);
+    //{ 
+    //auto* p = reinterpret_cast<double*>(&z);
+    //return p[0];
+    //}
 
-inline LAPACK_REAL& 
-imagRef(LAPACK_COMPLEX & z) 
-    { 
-    auto* p = reinterpret_cast<double*>(&z);
-    return p[1];
-    }
+inline LAPACK_REAL&
+imagRef(LAPACK_COMPLEX& z);
+    //{ 
+    //auto* p = reinterpret_cast<double*>(&z);
+    //return p[1];
+    //}
 }
 
 //

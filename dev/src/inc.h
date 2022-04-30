@@ -1,6 +1,7 @@
 #pragma once
 
-#define ARMA_BLAS_NO_UNDERSCORE
+
+//#define ARMA_BLAS_NO_UNDERSCORE
 #define ARMA_DONT_USE_FORTRAN_HIDDEN_ARGS
 #include <armadillo>
 
@@ -11,6 +12,6 @@
 
 using namespace itensor;
 using namespace std;
-//using namespace std::chrono;
+using namespace std::chrono;
 using namespace arma;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pch.h"
+#include "../inc.h"
 
 //ITensor update(const ITensor& AA, const IndexSet& is, const int maxdim);
 

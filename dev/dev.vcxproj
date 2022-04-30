@@ -125,7 +125,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <AdditionalOptions>/DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_STRUCTURE   /D__MY_WIN__  /DH5Oget_info_by_name_vers=1    /DH5O_info_t_vers=1     /DH5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP   /D__MY_WIN__  /DH5Oget_info_by_name_vers=1    /DH5O_info_t_vers=1     /DH5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -148,7 +148,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)\dependencies;$(ProjectDir)src;C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\app\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions>/DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_STRUCTURE   /D__MY_WIN__  /DH5Oget_info_by_name_vers=1    /DH5O_info_t_vers=1     /DH5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP   /D__MY_WIN__  /DH5Oget_info_by_name_vers=1    /DH5O_info_t_vers=1     /DH5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -194,78 +194,19 @@
     <ClCompile Include="dependencies\itensor\util\args.cc" />
     <ClCompile Include="dependencies\itensor\util\cputime.cc" />
     <ClCompile Include="dependencies\itensor\util\input.cc" />
-    <ClCompile Include="src\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\TRG\radial_trans.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\TRG\GiltTNR.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\TRG\loopTNR.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\TRG\TEFR.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\TRG\tnr.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\TRG\trg.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\util\database.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\util\extract_mat.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\util\glue.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\util\it_help.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\opt\descend.cpp" />
+    <ClCompile Include="src\TRG\GiltTNR.cpp" />
+    <ClCompile Include="src\TRG\loopTNR.cpp" />
+    <ClCompile Include="src\TRG\radial_trans.cpp" />
+    <ClCompile Include="src\TRG\TEFR.cpp" />
+    <ClCompile Include="src\TRG\tnr.cpp" />
+    <ClCompile Include="src\TRG\trg.cpp" />
+    <ClCompile Include="src\util\cft_data.cpp" />
+    <ClCompile Include="src\util\database.cpp" />
+    <ClCompile Include="src\util\extract_mat.cpp" />
+    <ClCompile Include="src\util\glue.cpp" />
+    <ClCompile Include="src\util\it_help.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\armadillo_bits\access.hpp" />
@@ -1579,16 +1520,14 @@
     <ClInclude Include="dependencies\itensor\util\typelist.h" />
     <ClInclude Include="dependencies\itensor\util\vararray.h" />
     <ClInclude Include="dependencies\itensor\util\vector_no_init.h" />
-    <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\inc.h" />
+    <ClInclude Include="src\opt\descend.h" />
     <ClInclude Include="src\sample\adjoint.h" />
     <ClInclude Include="src\sample\arpack_test.h" />
+    <ClInclude Include="src\sample\ctmrg.h" />
     <ClInclude Include="src\sample\diagonalize_adjoint.h" />
     <ClInclude Include="src\sample\dmrg_ising.h" />
     <ClInclude Include="src\sample\dmrg_test.h" />
-    <ClInclude Include="src\TRG\radial_trans.h" />
-    <ClInclude Include="src\inc.h" />
-    <ClInclude Include="src\opt\descend.h" />
-    <ClInclude Include="src\sample\ctmrg.h" />
     <ClInclude Include="src\sample\fibo_exact.h" />
     <ClInclude Include="src\sample\idmrg.h" />
     <ClInclude Include="src\sample\ising_trg.h" />
@@ -1597,9 +1536,11 @@
     <ClInclude Include="src\sample\tnr_test.h" />
     <ClInclude Include="src\TRG\GiltTNR.h" />
     <ClInclude Include="src\TRG\loopTNR.h" />
+    <ClInclude Include="src\TRG\radial_trans.h" />
     <ClInclude Include="src\TRG\TEFR.h" />
     <ClInclude Include="src\TRG\tnr.h" />
     <ClInclude Include="src\TRG\trg.h" />
+    <ClInclude Include="src\util\arnoldi.h" />
     <ClInclude Include="src\util\arpack_wrap.h" />
     <ClInclude Include="src\util\cft_data.h" />
     <ClInclude Include="src\util\database.h" />

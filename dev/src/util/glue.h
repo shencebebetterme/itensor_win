@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pch.h"
+#include "../inc.h"
 
 
 // glue a row of 4-leg tensors A with tags "u","r","d","l"

@@ -115,7 +115,7 @@ typedef void* void_ptr;
   typedef long      blas_int;
   #define ARMA_MAX_BLAS_INT 0x7fffffffffffffffUL
 #else
-  typedef int       blas_int;
+  typedef int32_t       blas_int;
   #define ARMA_MAX_BLAS_INT 0x7fffffffU
 #endif
 
@@ -129,8 +129,14 @@ typedef void* void_ptr;
   typedef MKL_Complex16 blas_cxd;
 #else
   // standard BLAS and LAPACK prototypes use "void*" pointers for complex arrays
-  typedef void blas_cxf;
-  typedef void blas_cxd;
+ /* typedef void blas_cxf;
+  typedef void blas_cxd;*/
+  typedef std::complex<float> blas_cxf;
+  typedef std::complex<double> blas_cxd;
+  /*typedef struct { float real, imag; } _lapack_complex_float;
+  typedef struct { double real, imag; } _lapack_complex_double;
+  using  blas_cxf = _lapack_complex_float;
+  using  blas_cxd = _lapack_complex_double;*/
 #endif
 
 

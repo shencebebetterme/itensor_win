@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pch.h"
+#include "../inc.h"
 
 ITensor trg(ITensor A, int maxdim, int scale);
 

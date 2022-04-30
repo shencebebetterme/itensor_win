@@ -1,7 +1,5 @@
 #pragma once
 
-#include "pch.h"
-
 #include "inc.h"
 #include "util/database.h"
 #include "util/extract_mat.h"
