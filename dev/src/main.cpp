@@ -1,5 +1,5 @@
 
-//#include "inc.h"
+#include "inc.h"
 //#include "util/database.h"
 //#include "util/extract_mat.h"
 //#include "util/cft_data.h"
@@ -20,13 +20,7 @@
 //#include "sample/ctmrg.h"
 //#include "itensor/all.h"
 //#include "util/arnoldi.h"
-//
-#define ARMA_DONT_USE_FORTRAN_HIDDEN_ARGS
-#define ARMA_USE_LAPACK
 
-#include "cblas.h"
-#include "lapack.h"
-#include <armadillo>
 
 int main() {
 	arma::mat A = arma::randu<arma::mat>(10, 10);

@@ -120,12 +120,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;DEBUG;_CONSOLE;%(PreprocessorDefinitions);HAVE_LAPACK_CONFIG_H;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\dependencies;$(ProjectDir)src;C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\app\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\itensor;$(ProjectDir)\dependencies;$(ProjectDir)src;C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\app\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP   /D__MY_WIN__  /DH5Oget_info_by_name_vers=1    /DH5O_info_t_vers=1     /DH5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -145,10 +145,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HAVE_LAPACK_CONFIG_H;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\dependencies;$(ProjectDir)src;C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\app\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\itensor;$(ProjectDir)\dependencies;$(ProjectDir)src;C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\app\green_apps\HDF5-1.12.0-win64-cmake\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP   /D__MY_WIN__  /DH5Oget_info_by_name_vers=1    /DH5O_info_t_vers=1     /DH5_BUILT_AS_DYNAMIC_LIB=1 /w44190 /w44267 /w44244 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -163,37 +163,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dependencies\itensor\decomp.cc" />
-    <ClCompile Include="dependencies\itensor\global.cc" />
-    <ClCompile Include="dependencies\itensor\hermitian.cc" />
-    <ClCompile Include="dependencies\itensor\index.cc" />
-    <ClCompile Include="dependencies\itensor\indexset.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\combiner.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\dense.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\diag.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\qcombiner.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\qdense.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\qdiag.cc" />
-    <ClCompile Include="dependencies\itensor\itdata\scalar.cc" />
-    <ClCompile Include="dependencies\itensor\itensor.cc" />
-    <ClCompile Include="dependencies\itensor\mps\autompo.cc" />
-    <ClCompile Include="dependencies\itensor\mps\mpo.cc" />
-    <ClCompile Include="dependencies\itensor\mps\mpoalgs.cc" />
-    <ClCompile Include="dependencies\itensor\mps\mps.cc" />
-    <ClCompile Include="dependencies\itensor\mps\mpsalgs.cc" />
-    <ClCompile Include="dependencies\itensor\qn.cc" />
-    <ClCompile Include="dependencies\itensor\spectrum.cc" />
-    <ClCompile Include="dependencies\itensor\svd.cc" />
-    <ClCompile Include="dependencies\itensor\tagset.cc" />
-    <ClCompile Include="dependencies\itensor\tensor\algs.cc" />
-    <ClCompile Include="dependencies\itensor\tensor\contract.cc" />
-    <ClCompile Include="dependencies\itensor\tensor\gemm.cc" />
-    <ClCompile Include="dependencies\itensor\tensor\lapack_wrap.cc" />
-    <ClCompile Include="dependencies\itensor\tensor\mat.cc" />
-    <ClCompile Include="dependencies\itensor\tensor\vec.cc" />
-    <ClCompile Include="dependencies\itensor\util\args.cc" />
-    <ClCompile Include="dependencies\itensor\util\cputime.cc" />
-    <ClCompile Include="dependencies\itensor\util\input.cc" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\opt\descend.cpp" />
     <ClCompile Include="src\TRG\GiltTNR.cpp" />
@@ -1398,128 +1367,6 @@
     <ClInclude Include="dependencies\arma\armadillo_bits\xtrans_mat_meat.hpp" />
     <ClInclude Include="dependencies\arma\armadillo_bits\xvec_htrans_bones.hpp" />
     <ClInclude Include="dependencies\arma\armadillo_bits\xvec_htrans_meat.hpp" />
-    <ClInclude Include="dependencies\itensor\all.h" />
-    <ClInclude Include="dependencies\itensor\all_basic.h" />
-    <ClInclude Include="dependencies\itensor\all_mps.h" />
-    <ClInclude Include="dependencies\itensor\arrow.h" />
-    <ClInclude Include="dependencies\itensor\config.h" />
-    <ClInclude Include="dependencies\itensor\core.h" />
-    <ClInclude Include="dependencies\itensor\decomp.h" />
-    <ClInclude Include="dependencies\itensor\decomp_impl.h" />
-    <ClInclude Include="dependencies\unistd.h" />
-    <ClInclude Include="dependencies\itensor\dependencies\unistd1.h" />
-    <ClInclude Include="dependencies\itensor\detail\algs.h" />
-    <ClInclude Include="dependencies\itensor\detail\call_rewrite.h" />
-    <ClInclude Include="dependencies\itensor\detail\gcounter.h" />
-    <ClInclude Include="dependencies\itensor\detail\skip_iterator.h" />
-    <ClInclude Include="dependencies\itensor\global.h" />
-    <ClInclude Include="dependencies\itensor\index.h" />
-    <ClInclude Include="dependencies\itensor\indexset.h" />
-    <ClInclude Include="dependencies\itensor\indexset_impl.h" />
-    <ClInclude Include="dependencies\itensor\index_impl.h" />
-    <ClInclude Include="dependencies\itensor\itdata\applyfunc.h" />
-    <ClInclude Include="dependencies\itensor\itdata\combiner.h" />
-    <ClInclude Include="dependencies\itensor\itdata\dense.h" />
-    <ClInclude Include="dependencies\itensor\itdata\diag.h" />
-    <ClInclude Include="dependencies\itensor\itdata\dotask.h" />
-    <ClInclude Include="dependencies\itensor\itdata\itdata.h" />
-    <ClInclude Include="dependencies\itensor\itdata\itlazy.h" />
-    <ClInclude Include="dependencies\itensor\itdata\qcombiner.h" />
-    <ClInclude Include="dependencies\itensor\itdata\qdense.h" />
-    <ClInclude Include="dependencies\itensor\itdata\qdiag.h" />
-    <ClInclude Include="dependencies\itensor\itdata\qutil.h" />
-    <ClInclude Include="dependencies\itensor\itdata\returntype.h" />
-    <ClInclude Include="dependencies\itensor\itdata\scalar.h" />
-    <ClInclude Include="dependencies\itensor\itdata\storage_types.h" />
-    <ClInclude Include="dependencies\itensor\itdata\synchronized.h" />
-    <ClInclude Include="dependencies\itensor\itdata\task_types.h" />
-    <ClInclude Include="dependencies\itensor\itensor.h" />
-    <ClInclude Include="dependencies\itensor\itensor_impl.h" />
-    <ClInclude Include="dependencies\itensor\iterativesolvers.h" />
-    <ClInclude Include="dependencies\itensor\mps\autompo.h" />
-    <ClInclude Include="dependencies\itensor\mps\bondgate.h" />
-    <ClInclude Include="dependencies\itensor\mps\dmrg.h" />
-    <ClInclude Include="dependencies\itensor\mps\DMRGObserver.h" />
-    <ClInclude Include="dependencies\itensor\mps\hambuilder.h" />
-    <ClInclude Include="dependencies\itensor\mps\integrators.h" />
-    <ClInclude Include="dependencies\itensor\mps\lattice\latticebond.h" />
-    <ClInclude Include="dependencies\itensor\mps\lattice\square.h" />
-    <ClInclude Include="dependencies\itensor\mps\lattice\triangular.h" />
-    <ClInclude Include="dependencies\itensor\mps\localmpo.h" />
-    <ClInclude Include="dependencies\itensor\mps\localmposet.h" />
-    <ClInclude Include="dependencies\itensor\mps\localmpo_mps.h" />
-    <ClInclude Include="dependencies\itensor\mps\localop.h" />
-    <ClInclude Include="dependencies\itensor\mps\mpo.h" />
-    <ClInclude Include="dependencies\itensor\mps\mps.h" />
-    <ClInclude Include="dependencies\itensor\mps\mps_impl.h" />
-    <ClInclude Include="dependencies\itensor\mps\observer.h" />
-    <ClInclude Include="dependencies\itensor\mps\siteset.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\boson.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\customspin.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\electron.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\fermion.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\spinhalf.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\spinone.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\spintwo.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\tj.h" />
-    <ClInclude Include="dependencies\itensor\mps\sites\Z3.h" />
-    <ClInclude Include="dependencies\itensor\mps\sweeps.h" />
-    <ClInclude Include="dependencies\itensor\mps\tevol.h" />
-    <ClInclude Include="dependencies\itensor\mps\TEvolObserver.h" />
-    <ClInclude Include="dependencies\itensor\qn.h" />
-    <ClInclude Include="dependencies\itensor\real.h" />
-    <ClInclude Include="dependencies\itensor\smallstring.h" />
-    <ClInclude Include="dependencies\itensor\spectrum.h" />
-    <ClInclude Include="dependencies\itensor\tagset.h" />
-    <ClInclude Include="dependencies\itensor\tensor\algs.h" />
-    <ClInclude Include="dependencies\itensor\tensor\algs_impl.h" />
-    <ClInclude Include="dependencies\itensor\tensor\contract.h" />
-    <ClInclude Include="dependencies\itensor\tensor\contract_impl.h" />
-    <ClInclude Include="dependencies\itensor\tensor\lapack_wrap.h" />
-    <ClInclude Include="dependencies\itensor\tensor\mat.h" />
-    <ClInclude Include="dependencies\itensor\tensor\matrange.h" />
-    <ClInclude Include="dependencies\itensor\tensor\mat_impl.h" />
-    <ClInclude Include="dependencies\itensor\tensor\permutation.h" />
-    <ClInclude Include="dependencies\itensor\tensor\range.h" />
-    <ClInclude Include="dependencies\itensor\tensor\rangeiter.h" />
-    <ClInclude Include="dependencies\itensor\tensor\slicemat.h" />
-    <ClInclude Include="dependencies\itensor\tensor\slicerange.h" />
-    <ClInclude Include="dependencies\itensor\tensor\sliceten.h" />
-    <ClInclude Include="dependencies\itensor\tensor\ten.h" />
-    <ClInclude Include="dependencies\itensor\tensor\teniter.h" />
-    <ClInclude Include="dependencies\itensor\tensor\ten_impl.h" />
-    <ClInclude Include="dependencies\itensor\tensor\types.h" />
-    <ClInclude Include="dependencies\itensor\tensor\vec.h" />
-    <ClInclude Include="dependencies\itensor\tensor\vecrange.h" />
-    <ClInclude Include="dependencies\itensor\types.h" />
-    <ClInclude Include="dependencies\itensor\util\args.h" />
-    <ClInclude Include="dependencies\itensor\util\autovector.h" />
-    <ClInclude Include="dependencies\itensor\util\cplx_literal.h" />
-    <ClInclude Include="dependencies\itensor\util\cputime.h" />
-    <ClInclude Include="dependencies\itensor\util\error.h" />
-    <ClInclude Include="dependencies\itensor\util\flstring.h" />
-    <ClInclude Include="dependencies\itensor\util\infarray.h" />
-    <ClInclude Include="dependencies\itensor\util\input.h" />
-    <ClInclude Include="dependencies\itensor\util\iterate.h" />
-    <ClInclude Include="dependencies\itensor\util\itertools.h" />
-    <ClInclude Include="dependencies\itensor\util\multalloc.h" />
-    <ClInclude Include="dependencies\itensor\util\optional_ptr.h" />
-    <ClInclude Include="dependencies\itensor\util\parallel.h" />
-    <ClInclude Include="dependencies\itensor\util\print.h" />
-    <ClInclude Include="dependencies\itensor\util\print_macro.h" />
-    <ClInclude Include="dependencies\itensor\util\readwrite.h" />
-    <ClInclude Include="dependencies\itensor\util\safe_ptr.h" />
-    <ClInclude Include="dependencies\itensor\util\set_scoped.h" />
-    <ClInclude Include="dependencies\itensor\util\static_count.h" />
-    <ClInclude Include="dependencies\itensor\util\stats.h" />
-    <ClInclude Include="dependencies\itensor\util\stdx.h" />
-    <ClInclude Include="dependencies\itensor\util\str.h" />
-    <ClInclude Include="dependencies\itensor\util\tensorstats.h" />
-    <ClInclude Include="dependencies\itensor\util\timers.h" />
-    <ClInclude Include="dependencies\itensor\util\tinyformat.h" />
-    <ClInclude Include="dependencies\itensor\util\typelist.h" />
-    <ClInclude Include="dependencies\itensor\util\vararray.h" />
-    <ClInclude Include="dependencies\itensor\util\vector_no_init.h" />
     <ClInclude Include="src\inc.h" />
     <ClInclude Include="src\opt\descend.h" />
     <ClInclude Include="src\sample\adjoint.h" />
@@ -1550,6 +1397,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\arma\armadillo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\itensor\itensor.vcxproj">
+      <Project>{1bb53736-463d-4a47-a426-1e7bc8df329e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

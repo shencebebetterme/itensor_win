@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1bb53736-463d-4a47-a426-1e7bc8df329e}</ProjectGuid>
+    <RootNamespace>itensor</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)\bin\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\bin-int\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)\bin\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\bin-int\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /DHAVE_LAPACK_CONFIG_H /DLAPACK_COMPLEX_CPP /DDEBUG</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /DHAVE_LAPACK_CONFIG_H /DLAPACK_COMPLEX_CPP</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="itensor\all.h" />
+    <ClInclude Include="itensor\all_basic.h" />
+    <ClInclude Include="itensor\all_mps.h" />
+    <ClInclude Include="itensor\arrow.h" />
+    <ClInclude Include="itensor\config.h" />
+    <ClInclude Include="itensor\core.h" />
+    <ClInclude Include="itensor\decomp.h" />
+    <ClInclude Include="itensor\decomp_impl.h" />
+    <ClInclude Include="itensor\dependencies\unistd1.h" />
+    <ClInclude Include="itensor\detail\algs.h" />
+    <ClInclude Include="itensor\detail\call_rewrite.h" />
+    <ClInclude Include="itensor\detail\gcounter.h" />
+    <ClInclude Include="itensor\detail\skip_iterator.h" />
+    <ClInclude Include="itensor\global.h" />
+    <ClInclude Include="itensor\index.h" />
+    <ClInclude Include="itensor\indexset.h" />
+    <ClInclude Include="itensor\indexset_impl.h" />
+    <ClInclude Include="itensor\index_impl.h" />
+    <ClInclude Include="itensor\itdata\applyfunc.h" />
+    <ClInclude Include="itensor\itdata\combiner.h" />
+    <ClInclude Include="itensor\itdata\dense.h" />
+    <ClInclude Include="itensor\itdata\diag.h" />
+    <ClInclude Include="itensor\itdata\dotask.h" />
+    <ClInclude Include="itensor\itdata\itdata.h" />
+    <ClInclude Include="itensor\itdata\itlazy.h" />
+    <ClInclude Include="itensor\itdata\qcombiner.h" />
+    <ClInclude Include="itensor\itdata\qdense.h" />
+    <ClInclude Include="itensor\itdata\qdiag.h" />
+    <ClInclude Include="itensor\itdata\qutil.h" />
+    <ClInclude Include="itensor\itdata\returntype.h" />
+    <ClInclude Include="itensor\itdata\scalar.h" />
+    <ClInclude Include="itensor\itdata\storage_types.h" />
+    <ClInclude Include="itensor\itdata\synchronized.h" />
+    <ClInclude Include="itensor\itdata\task_types.h" />
+    <ClInclude Include="itensor\itensor.h" />
+    <ClInclude Include="itensor\itensor_impl.h" />
+    <ClInclude Include="itensor\iterativesolvers.h" />
+    <ClInclude Include="itensor\mps\autompo.h" />
+    <ClInclude Include="itensor\mps\bondgate.h" />
+    <ClInclude Include="itensor\mps\dmrg.h" />
+    <ClInclude Include="itensor\mps\DMRGObserver.h" />
+    <ClInclude Include="itensor\mps\hambuilder.h" />
+    <ClInclude Include="itensor\mps\integrators.h" />
+    <ClInclude Include="itensor\mps\lattice\latticebond.h" />
+    <ClInclude Include="itensor\mps\lattice\square.h" />
+    <ClInclude Include="itensor\mps\lattice\triangular.h" />
+    <ClInclude Include="itensor\mps\localmpo.h" />
+    <ClInclude Include="itensor\mps\localmposet.h" />
+    <ClInclude Include="itensor\mps\localmpo_mps.h" />
+    <ClInclude Include="itensor\mps\localop.h" />
+    <ClInclude Include="itensor\mps\mpo.h" />
+    <ClInclude Include="itensor\mps\mps.h" />
+    <ClInclude Include="itensor\mps\mps_impl.h" />
+    <ClInclude Include="itensor\mps\observer.h" />
+    <ClInclude Include="itensor\mps\siteset.h" />
+    <ClInclude Include="itensor\mps\sites\boson.h" />
+    <ClInclude Include="itensor\mps\sites\customspin.h" />
+    <ClInclude Include="itensor\mps\sites\electron.h" />
+    <ClInclude Include="itensor\mps\sites\fermion.h" />
+    <ClInclude Include="itensor\mps\sites\spinhalf.h" />
+    <ClInclude Include="itensor\mps\sites\spinone.h" />
+    <ClInclude Include="itensor\mps\sites\spintwo.h" />
+    <ClInclude Include="itensor\mps\sites\tj.h" />
+    <ClInclude Include="itensor\mps\sites\Z3.h" />
+    <ClInclude Include="itensor\mps\sweeps.h" />
+    <ClInclude Include="itensor\mps\tevol.h" />
+    <ClInclude Include="itensor\mps\TEvolObserver.h" />
+    <ClInclude Include="itensor\qn.h" />
+    <ClInclude Include="itensor\real.h" />
+    <ClInclude Include="itensor\smallstring.h" />
+    <ClInclude Include="itensor\spectrum.h" />
+    <ClInclude Include="itensor\tagset.h" />
+    <ClInclude Include="itensor\tensor\algs.h" />
+    <ClInclude Include="itensor\tensor\algs_impl.h" />
+    <ClInclude Include="itensor\tensor\contract.h" />
+    <ClInclude Include="itensor\tensor\contract_impl.h" />
+    <ClInclude Include="itensor\tensor\lapack_wrap.h" />
+    <ClInclude Include="itensor\tensor\mat.h" />
+    <ClInclude Include="itensor\tensor\matrange.h" />
+    <ClInclude Include="itensor\tensor\mat_impl.h" />
+    <ClInclude Include="itensor\tensor\permutation.h" />
+    <ClInclude Include="itensor\tensor\range.h" />
+    <ClInclude Include="itensor\tensor\rangeiter.h" />
+    <ClInclude Include="itensor\tensor\slicemat.h" />
+    <ClInclude Include="itensor\tensor\slicerange.h" />
+    <ClInclude Include="itensor\tensor\sliceten.h" />
+    <ClInclude Include="itensor\tensor\ten.h" />
+    <ClInclude Include="itensor\tensor\teniter.h" />
+    <ClInclude Include="itensor\tensor\ten_impl.h" />
+    <ClInclude Include="itensor\tensor\types.h" />
+    <ClInclude Include="itensor\tensor\vec.h" />
+    <ClInclude Include="itensor\tensor\vecrange.h" />
+    <ClInclude Include="itensor\types.h" />
+    <ClInclude Include="itensor\util\args.h" />
+    <ClInclude Include="itensor\util\autovector.h" />
+    <ClInclude Include="itensor\util\cplx_literal.h" />
+    <ClInclude Include="itensor\util\cputime.h" />
+    <ClInclude Include="itensor\util\error.h" />
+    <ClInclude Include="itensor\util\flstring.h" />
+    <ClInclude Include="itensor\util\infarray.h" />
+    <ClInclude Include="itensor\util\input.h" />
+    <ClInclude Include="itensor\util\iterate.h" />
+    <ClInclude Include="itensor\util\itertools.h" />
+    <ClInclude Include="itensor\util\multalloc.h" />
+    <ClInclude Include="itensor\util\optional_ptr.h" />
+    <ClInclude Include="itensor\util\parallel.h" />
+    <ClInclude Include="itensor\util\print.h" />
+    <ClInclude Include="itensor\util\print_macro.h" />
+    <ClInclude Include="itensor\util\readwrite.h" />
+    <ClInclude Include="itensor\util\safe_ptr.h" />
+    <ClInclude Include="itensor\util\set_scoped.h" />
+    <ClInclude Include="itensor\util\static_count.h" />
+    <ClInclude Include="itensor\util\stats.h" />
+    <ClInclude Include="itensor\util\stdx.h" />
+    <ClInclude Include="itensor\util\str.h" />
+    <ClInclude Include="itensor\util\tensorstats.h" />
+    <ClInclude Include="itensor\util\timers.h" />
+    <ClInclude Include="itensor\util\tinyformat.h" />
+    <ClInclude Include="itensor\util\typelist.h" />
+    <ClInclude Include="itensor\util\vararray.h" />
+    <ClInclude Include="itensor\util\vector_no_init.h" />
+    <ClInclude Include="unistd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="itensor\decomp.cc" />
+    <ClCompile Include="itensor\global.cc" />
+    <ClCompile Include="itensor\hermitian.cc" />
+    <ClCompile Include="itensor\index.cc" />
+    <ClCompile Include="itensor\indexset.cc" />
+    <ClCompile Include="itensor\itdata\combiner.cc" />
+    <ClCompile Include="itensor\itdata\dense.cc" />
+    <ClCompile Include="itensor\itdata\diag.cc" />
+    <ClCompile Include="itensor\itdata\qcombiner.cc" />
+    <ClCompile Include="itensor\itdata\qdense.cc" />
+    <ClCompile Include="itensor\itdata\qdiag.cc" />
+    <ClCompile Include="itensor\itdata\scalar.cc" />
+    <ClCompile Include="itensor\itensor.cc" />
+    <ClCompile Include="itensor\mps\autompo.cc" />
+    <ClCompile Include="itensor\mps\mpo.cc" />
+    <ClCompile Include="itensor\mps\mpoalgs.cc" />
+    <ClCompile Include="itensor\mps\mps.cc" />
+    <ClCompile Include="itensor\mps\mpsalgs.cc" />
+    <ClCompile Include="itensor\qn.cc" />
+    <ClCompile Include="itensor\spectrum.cc" />
+    <ClCompile Include="itensor\svd.cc" />
+    <ClCompile Include="itensor\tagset.cc" />
+    <ClCompile Include="itensor\tensor\algs.cc" />
+    <ClCompile Include="itensor\tensor\contract.cc" />
+    <ClCompile Include="itensor\tensor\gemm.cc" />
+    <ClCompile Include="itensor\tensor\lapack_wrap.cc" />
+    <ClCompile Include="itensor\tensor\mat.cc" />
+    <ClCompile Include="itensor\tensor\vec.cc" />
+    <ClCompile Include="itensor\util\args.cc" />
+    <ClCompile Include="itensor\util\cputime.cc" />
+    <ClCompile Include="itensor\util\input.cc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
