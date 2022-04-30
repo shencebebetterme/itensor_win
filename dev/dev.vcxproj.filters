@@ -54,6 +54,9 @@
     <ClCompile Include="src\util\it_help.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\arma\armadillo_bits\access.hpp">
@@ -3623,7 +3626,7 @@
     <ClInclude Include="dependencies\armadillo_bits\xvec_htrans_meat.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\inc.h">
+    <ClInclude Include="src\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opt\descend.h">

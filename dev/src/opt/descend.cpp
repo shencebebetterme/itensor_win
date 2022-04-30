@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "descend.h"
 
 // matrix log of a square tensor

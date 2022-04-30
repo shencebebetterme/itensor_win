@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GiltTNR.h"
 #include "trg.h"
 #include "../util/it_help.h"

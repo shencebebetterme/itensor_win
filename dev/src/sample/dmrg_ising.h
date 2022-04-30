@@ -1,5 +1,5 @@
 #pragma once
-#include "../inc.h"
+#include "../pch.h"
 #include "itensor/all.h"
 
 void dmrg_ising() {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../inc.h"
+#include "../pch.h"
 
 const double J = 1.0;
 const int dim0 = 2; //for Ising model

@@ -127,7 +127,7 @@
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -150,7 +150,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -165,6 +165,12 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\opt\descend.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\TRG\GiltTNR.cpp" />
     <ClCompile Include="src\TRG\loopTNR.cpp" />
     <ClCompile Include="src\TRG\radial_trans.cpp" />
@@ -1367,7 +1373,7 @@
     <ClInclude Include="dependencies\arma\armadillo_bits\xtrans_mat_meat.hpp" />
     <ClInclude Include="dependencies\arma\armadillo_bits\xvec_htrans_bones.hpp" />
     <ClInclude Include="dependencies\arma\armadillo_bits\xvec_htrans_meat.hpp" />
-    <ClInclude Include="src\inc.h" />
+    <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\opt\descend.h" />
     <ClInclude Include="src\sample\adjoint.h" />
     <ClInclude Include="src\sample\arpack_test.h" />

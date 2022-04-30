@@ -5,7 +5,7 @@
 #define ARMA_DONT_USE_FORTRAN_HIDDEN_ARGS
 #include <armadillo>
 
-#include "itensor/all_basic.h"
+#include "itensor/all.h"
 #include "itensor/util/print_macro.h"
 
 #include <iostream>

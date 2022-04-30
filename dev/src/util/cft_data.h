@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../inc.h"
+#include "../pch.h"
 
 
 constexpr double PI = 3.1415926535;

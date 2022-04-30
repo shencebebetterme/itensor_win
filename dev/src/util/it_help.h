@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../inc.h"
+#include "../pch.h"
 
 double get_max(ITensor&);
 double get_max_abs(ITensor&);
