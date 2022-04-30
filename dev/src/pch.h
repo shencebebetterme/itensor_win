@@ -9,6 +9,7 @@
 #include "itensor/util/print_macro.h"
 
 #include <iostream>
+#include <chrono>
 
 using namespace itensor;
 using namespace std;

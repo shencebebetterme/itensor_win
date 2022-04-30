@@ -4,8 +4,7 @@
 
 #include "database.h"
 
-namespace database {
-
+namespace db {
 
 ITensor ising2d(double beta) {
 	//const double beta_c = 0.5 * log(1 + sqrt(2));

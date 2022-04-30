@@ -3,7 +3,9 @@
 #include "../pch.h"
 
 
-namespace database {
+namespace db {
+
+const double beta_c = 0.5 * log(1 + sqrt(2));
 
 // 2d classical Ising model
 // 4 indices: up, right, down, left, 

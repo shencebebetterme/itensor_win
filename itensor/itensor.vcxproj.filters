@@ -381,6 +381,63 @@
     <ClInclude Include="unistd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="itensor\util\h5\array_interface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\base_public.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\format.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\generic.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\group.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\h5object.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\macros.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\scalar.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\serialization.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\wrap_h5.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\std_addons\complex.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\optional.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\pair.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\string.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\tuple.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\variant.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itensor\util\h5\stl\vector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="itensor\itdata\combiner.cc">
@@ -474,6 +531,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="itensor\tagset.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\array_interface.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\file.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\group.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\h5object.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\stl\string.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itensor\util\h5\stl\vector.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

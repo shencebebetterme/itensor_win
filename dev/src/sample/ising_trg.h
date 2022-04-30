@@ -9,7 +9,7 @@ ITensor trg(ITensor, int, int);
 
 void ising_trg() {
 	const double beta_c = 0.5 * log(1 + sqrt(2));
-	ITensor A = database::ising2d(beta_c);
+	ITensor A = db::ising2d(beta_c);
 	ITensor As = trg(A, 20, 6); // maxdim=20, steps=6
 
 	Index l = findIndex(As, "l");

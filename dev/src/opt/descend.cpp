@@ -35,7 +35,7 @@ ITensor tensor_log(ITensor A) {
 
 void local_gauge(int n_chain) {
 	const double beta_c = 0.5 * log(1 + sqrt(2));
-	ITensor A0 = database::ising2d(beta_c);
+	ITensor A0 = db::ising2d(beta_c);
 	const double c_ising = 0.5;//central charge
 	const double f_ising = 0.929695;//free energy per site
 	const double fA = f_ising * 2; //free energy per A tensor

@@ -46,6 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\bin-int\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-g</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Configuration)\</OutDir>
@@ -55,22 +56,22 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\Program Files\HDF_Group\HDF5\1.12.2\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>/bigobj /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /DHAVE_LAPACK_CONFIG_H /DLAPACK_COMPLEX_CPP /DDEBUG</AdditionalOptions>
+      <AdditionalOptions>/bigobj /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /DHAVE_LAPACK_CONFIG_H /DLAPACK_COMPLEX_CPP /DITENSOR_USE_HDF51 /D__MY_WIN__ /DH5Oget_info_by_name_vers=1 /DH5O_info_t_vers=1 /DH5_BUILT_AS_DYNAMIC_LIB /DTINYFORMAT_USE_VARIADIC_TEMPLATES</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;</AdditionalDependencies>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;hdf5.lib;hdf5_hl.lib;</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;C:\Program Files\HDF_Group\HDF5\1.12.2\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -82,9 +83,9 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\Program Files\HDF_Group\HDF5\1.12.2\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>/bigobj /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /DHAVE_LAPACK_CONFIG_H /DLAPACK_COMPLEX_CPP</AdditionalOptions>
+      <AdditionalOptions>/bigobj /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /DHAVE_LAPACK_CONFIG_H /DLAPACK_COMPLEX_CPP /DITENSOR_USE_HDF51 /D__MY_WIN__ /DH5Oget_info_by_name_vers=1 /DH5O_info_t_vers=1 /DH5_BUILT_AS_DYNAMIC_LIB /DTINYFORMAT_USE_VARIADIC_TEMPLATES</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,10 +94,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;</AdditionalDependencies>
+      <AdditionalDependencies>libopenblas.dll.a;libarpack.dll.a;hdf5.lib;hdf5_hl.lib;</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\msys64\mingw64\lib;C:\Program Files\HDF_Group\HDF5\1.12.2\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -199,6 +200,25 @@
     <ClInclude Include="itensor\util\cputime.h" />
     <ClInclude Include="itensor\util\error.h" />
     <ClInclude Include="itensor\util\flstring.h" />
+    <ClInclude Include="itensor\util\h5\array_interface.hpp" />
+    <ClInclude Include="itensor\util\h5\base.hpp" />
+    <ClInclude Include="itensor\util\h5\base_public.hpp" />
+    <ClInclude Include="itensor\util\h5\format.hpp" />
+    <ClInclude Include="itensor\util\h5\generic.hpp" />
+    <ClInclude Include="itensor\util\h5\group.hpp" />
+    <ClInclude Include="itensor\util\h5\h5object.hpp" />
+    <ClInclude Include="itensor\util\h5\macros.hpp" />
+    <ClInclude Include="itensor\util\h5\scalar.hpp" />
+    <ClInclude Include="itensor\util\h5\serialization.hpp" />
+    <ClInclude Include="itensor\util\h5\std_addons\complex.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\map.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\optional.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\pair.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\string.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\tuple.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\variant.hpp" />
+    <ClInclude Include="itensor\util\h5\stl\vector.hpp" />
+    <ClInclude Include="itensor\util\h5\wrap_h5.hpp" />
     <ClInclude Include="itensor\util\infarray.h" />
     <ClInclude Include="itensor\util\input.h" />
     <ClInclude Include="itensor\util\iterate.h" />
@@ -254,6 +274,12 @@
     <ClCompile Include="itensor\tensor\vec.cc" />
     <ClCompile Include="itensor\util\args.cc" />
     <ClCompile Include="itensor\util\cputime.cc" />
+    <ClCompile Include="itensor\util\h5\array_interface.cc" />
+    <ClCompile Include="itensor\util\h5\file.cc" />
+    <ClCompile Include="itensor\util\h5\group.cc" />
+    <ClCompile Include="itensor\util\h5\h5object.cc" />
+    <ClCompile Include="itensor\util\h5\stl\string.cc" />
+    <ClCompile Include="itensor\util\h5\stl\vector.cc" />
     <ClCompile Include="itensor\util\input.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

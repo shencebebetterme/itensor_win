@@ -19,7 +19,7 @@ void fibo_exact() {
 	A.replaceTags("ll", "l");
 	*/
 
-	ITensor A = database::fibo_svd_bd();
+	ITensor A = db::fibo_svd_bd();
 
 	ITensor TM = glue(A, n);
 	arma::mat TMmat = extract_mat(TM);

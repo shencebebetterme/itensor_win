@@ -1,19 +1,17 @@
 
 #include "pch.h"
-//#include "util/database.h"
-//#include "util/extract_mat.h"
-//#include "util/cft_data.h"
-//#include "util/glue.h"
-//#include "util/it_help.h"
-//
-//#include "TRG/tnr.h"
-//#include "TRG/trg.h"
-//#include "TRG/GiltTNR.h"
-//
-//#include "opt/descend.h"
-//
-//#include <chrono>
-//using namespace std::chrono;
+#include "util/database.h"
+#include "util/extract_mat.h"
+#include "util/cft_data.h"
+#include "util/glue.h"
+#include "util/it_help.h"
+
+#include "TRG/tnr.h"
+#include "TRG/trg.h"
+#include "TRG/GiltTNR.h"
+
+#include "opt/descend.h"
+
 
 //ITensor trg(ITensor, int, int);
 
@@ -23,8 +21,11 @@
 
 
 int main() {
-	arma::mat A = arma::randu<arma::mat>(10, 10);
+	arma::mat A = arma::randu(5, 5);
+	print(A);
 	//arma::cx_mat B = arma::logmat(A);
+	ITensor T = extract_it(A);
 	
-	std::cout << "hello world" << std::endl;
+	ITensor M = db::ising2d(db::beta_c);
+	PrintData(M);
 }
