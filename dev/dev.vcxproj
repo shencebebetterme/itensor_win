@@ -125,7 +125,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /D_CRT_SECURE_NO_WARNINGS /DITENSOR_USE_HDF5 /D__MY_WIN__ /DH5Oget_info_by_name_vers=1 /DH5O_info_t_vers=1 /DH5_BUILT_AS_DYNAMIC_LIB %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /D_CRT_SECURE_NO_WARNINGS /DITENSOR_USE_HDF5 /D__MY_WIN__ /DH5Oget_info_by_name_vers=1 /DH5O_info_t_vers=1 /DH5_BUILT_AS_DYNAMIC_LIB  /w44819 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -148,7 +148,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\itensor;$(ProjectDir)\dependencies;$(ProjectDir)src;C:\msys64\mingw64\include\openblas;C:\msys64\mingw64\include\arpack;C:\msys64\mingw64\include\superlu;C:\Program Files\HDF_Group\HDF5\1.12.2\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /D_CRT_SECURE_NO_WARNINGS /DITENSOR_USE_HDF5 /D__MY_WIN__ /DH5Oget_info_by_name_vers=1 /DH5O_info_t_vers=1 /DH5_BUILT_AS_DYNAMIC_LIB %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/bigobj /DHAVE_LAPACK_CONFIG_H    /DLAPACK_COMPLEX_CPP /w44267 /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS /D_CRT_SECURE_NO_WARNINGS /DITENSOR_USE_HDF5 /D__MY_WIN__ /DH5Oget_info_by_name_vers=1 /DH5O_info_t_vers=1 /DH5_BUILT_AS_DYNAMIC_LIB  /w44819 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>

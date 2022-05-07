@@ -15,17 +15,21 @@
 
 //ITensor trg(ITensor, int, int);
 
-//#include "sample/ctmrg.h"
-//#include "itensor/all.h"
-//#include "util/arnoldi.h"
+// #include "sample/ctmrg.h"
+// #include "itensor/all.h"
+// #include "util/arnoldi.h"
+
+// TODO todo
 
 
 int main() {
-	arma::mat A = arma::randu(5, 5);
-	print(A);
-	//arma::cx_mat B = arma::logmat(A);
-	ITensor T = extract_it(A);
-	
-	ITensor M = db::ising2d(db::beta_c);
-	PrintData(M);
+	Index i(2, "i");
+	Index j(2, "j");          
+	IndexSet indices({ i, j }); 
+	ITensor T(indices);
+	T.set(i(1), j(1), 1.0);
+	T.set(i(2), j(2), 1.0);
+
+	auto vec_ni = (*((ITWrap<Dense<double>>*) & (*T.store()))).d.store;
+
 }

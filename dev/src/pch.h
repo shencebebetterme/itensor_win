@@ -3,6 +3,7 @@
 
 //#define ARMA_BLAS_NO_UNDERSCORE
 #define ARMA_DONT_USE_FORTRAN_HIDDEN_ARGS
+#define ARMA_USE_HDF5
 #include <armadillo>
 
 #include "itensor/all.h"
